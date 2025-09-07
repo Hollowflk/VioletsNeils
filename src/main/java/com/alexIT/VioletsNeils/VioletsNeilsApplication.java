@@ -15,19 +15,20 @@ import org.telegram.telegrambots.meta.generics.TelegramClient;
 @SpringBootApplication
 public class VioletsNeilsApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(VioletsNeilsApplication.class, args);
-		StandardEnvironment env = new StandardEnvironment();
-		try (TelegramBotsLongPollingApplication application = new TelegramBotsLongPollingApplication()) {
-			application.registerBot(env.getProperty("token"), new NeilBot(getTelegramClient(env)));
-			log.info("Бот запущен!");
-		} catch (Exception e) {
-			log.debug(e.getMessage());
-		}
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(VioletsNeilsApplication.class, args);
+        StandardEnvironment env = new StandardEnvironment();
+        try (TelegramBotsLongPollingApplication application = new TelegramBotsLongPollingApplication()) {
+            application.registerBot(env.getProperty("token"), new NeilBot(getTelegramClient(env)));
+            log.info("Бот запущен!");
+            Thread.currentThread().join();
+        } catch (Exception e) {
+            log.debug(e.getMessage());
+        }
+    }
 
-	@Bean
-	public static TelegramClient getTelegramClient(Environment env) {
-		return new OkHttpTelegramClient(env.getProperty("token"));
-	}
+    @Bean
+    public static TelegramClient getTelegramClient(Environment env) {
+        return new OkHttpTelegramClient(env.getProperty("token"));
+    }
 }
