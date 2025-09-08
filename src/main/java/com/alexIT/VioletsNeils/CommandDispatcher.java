@@ -2,6 +2,7 @@ package com.alexIT.VioletsNeils;
 
 import com.alexIT.VioletsNeils.commands.Command;
 import com.alexIT.VioletsNeils.commands.MenuCommand;
+import com.alexIT.VioletsNeils.commands.SignUpCommand;
 import com.alexIT.VioletsNeils.commands.UnknowCommand;
 import com.alexIT.VioletsNeils.enums.RoleUser;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,7 @@ public class CommandDispatcher {
 
     public CommandDispatcher() {
         commandList.add(new MenuCommand());
+        commandList.add(new SignUpCommand());
     }
 
     public BotApiMethod<?> handler(Update update) {
@@ -35,14 +37,23 @@ public class CommandDispatcher {
     private String getText(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
             return update.getMessage().getText();
+        } else {
+            return update.getCallbackQuery().getData();
         }
-        return "Неизвестная команда!";
     }
 
     // TODO: Убрать это отсюда
     private TgUser createUser(Update update) {
+        if (update.hasCallbackQuery()) {
+            return new TgUser(
+                    update.getCallbackQuery().getMessage().getChatId(),
+                    update.getCallbackQuery().getMessage().getMessageId(),
+                    RoleUser.USER
+            );
+        }
         return new TgUser(
                 update.getMessage().getChatId(),
+                update.getMessage().getMessageId(),
                 RoleUser.USER
         );
     }
