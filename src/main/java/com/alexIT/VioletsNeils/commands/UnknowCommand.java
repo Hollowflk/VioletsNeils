@@ -19,9 +19,4 @@ public class UnknowCommand implements Command {
                 .text("Неизвестная команда")
                 .build();
     }
-
-    @Override
-    public BotApiMethod<?> createMessage() {
-        return null;
-    }
 }

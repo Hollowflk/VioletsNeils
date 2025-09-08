@@ -3,7 +3,7 @@ package com.alexIT.VioletsNeils;
 import com.alexIT.VioletsNeils.commands.Command;
 import com.alexIT.VioletsNeils.commands.MenuCommand;
 import com.alexIT.VioletsNeils.commands.UnknowCommand;
-import com.alexIT.VioletsNeils.roles.RoleUser;
+import com.alexIT.VioletsNeils.enums.RoleUser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;

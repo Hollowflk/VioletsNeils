@@ -1,4 +1,4 @@
-package com.alexIT.VioletsNeils.roles;
+package com.alexIT.VioletsNeils.enums;
 
 public enum RoleUser {
     USER,

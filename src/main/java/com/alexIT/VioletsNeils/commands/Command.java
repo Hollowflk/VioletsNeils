@@ -8,6 +8,4 @@ public interface Command {
     boolean supports(String text);
 
     BotApiMethod<?> handler(TgUser tgUser);
-
-    BotApiMethod<?> createMessage();
 }

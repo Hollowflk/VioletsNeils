@@ -1,6 +1,6 @@
 package com.alexIT.VioletsNeils;
 
-import com.alexIT.VioletsNeils.roles.RoleUser;
+import com.alexIT.VioletsNeils.enums.RoleUser;
 import lombok.Data;
 
 import java.time.LocalDateTime;
