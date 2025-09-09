@@ -1,4 +1,4 @@
-package com.alexIT.VioletsNeils;
+package com.alexIT.VioletsNeils.entity;
 
 import com.alexIT.VioletsNeils.enums.RoleUser;
 import lombok.Data;

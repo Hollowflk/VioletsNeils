@@ -1,6 +1,6 @@
 package com.alexIT.VioletsNeils.commands;
 
-import com.alexIT.VioletsNeils.TgUser;
+import com.alexIT.VioletsNeils.entity.TgUser;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 
 public interface Command {

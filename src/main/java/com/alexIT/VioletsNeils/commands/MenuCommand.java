@@ -1,6 +1,6 @@
 package com.alexIT.VioletsNeils.commands;
 
-import com.alexIT.VioletsNeils.TgUser;
+import com.alexIT.VioletsNeils.entity.TgUser;
 import com.alexIT.VioletsNeils.enums.RoleUser;
 import com.alexIT.VioletsNeils.keyboards.AdminKeyboardBuilder;
 import com.alexIT.VioletsNeils.keyboards.DefaultKeyboardBuilder;

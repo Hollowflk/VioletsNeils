@@ -1,9 +1,7 @@
 package com.alexIT.VioletsNeils;
 
-import com.alexIT.VioletsNeils.commands.Command;
-import com.alexIT.VioletsNeils.commands.MenuCommand;
-import com.alexIT.VioletsNeils.commands.SignUpCommand;
-import com.alexIT.VioletsNeils.commands.UnknowCommand;
+import com.alexIT.VioletsNeils.commands.*;
+import com.alexIT.VioletsNeils.entity.TgUser;
 import com.alexIT.VioletsNeils.enums.RoleUser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -23,6 +21,8 @@ public class CommandDispatcher {
     public CommandDispatcher() {
         commandList.add(new MenuCommand());
         commandList.add(new SignUpCommand());
+        commandList.add(new CurrentMonthCommand());
+        commandList.add(new NextMonthCommand());
     }
 
     public BotApiMethod<?> handler(Update update) {

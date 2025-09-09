@@ -17,7 +17,8 @@ public class DefaultKeyboardBuilder implements KeyboardBuilder {
         return new InlineKeyboardMarkup(rows);
     }
 
-    private InlineKeyboardRow addButton(String description, String callBack) {
+    @Override
+    public InlineKeyboardRow addButton(String description, String callBack) {
         return new InlineKeyboardRow(InlineKeyboardButton.builder()
                 .text(description)
                 .callbackData(callBack)
