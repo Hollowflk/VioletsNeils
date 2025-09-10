@@ -13,16 +13,24 @@ import java.time.Month;
 import java.util.Map;
 
 @Component
-public class CurrentMonthCommand implements Command{
+public class MonthsCommand implements Command{
+
+    private String key;
+
     @Override
     public boolean supports(String text) {
-        return text != null && text.equals("/currentMonth");
+        if (text != null && (text.equals("/currentMonth") || text.equals("/nextMonth"))) {
+            key = text;
+            return true;
+        }
+        return false;
     }
 
     @Override
     public BotApiMethod<?> handler(TgUserDto userDto) {
         Map<String, Month> monthMap = MonthsAndDaysUtils.getMonthsAsValues();
-        int daysInMonth = MonthsAndDaysUtils.getDaysOfMonth(monthMap.get("currentMonth"));
+        key = key.substring(1);
+        int daysInMonth = MonthsAndDaysUtils.getDaysOfMonth(monthMap.get(key));
         KeyboardBuilder keyboardBuilder = new DaysKeyboardBuilder(daysInMonth);
         InlineKeyboardMarkup keyboard = keyboardBuilder.build();
         return EditMessageText.builder()
