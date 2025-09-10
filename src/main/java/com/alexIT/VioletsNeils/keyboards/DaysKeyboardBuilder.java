@@ -10,10 +10,12 @@ import java.util.List;
 
 public class DaysKeyboardBuilder implements KeyboardBuilder {
 
-    private int daysInMonth;
+    private final int daysInMonth;
+    private final String monthName;
 
-    public DaysKeyboardBuilder(int daysInMonth) {
+    public DaysKeyboardBuilder(int daysInMonth, String monthName) {
         this.daysInMonth = daysInMonth;
+        this.monthName = monthName;
     }
 
     @Override
@@ -24,13 +26,13 @@ public class DaysKeyboardBuilder implements KeyboardBuilder {
         InlineKeyboardRow row4 = new InlineKeyboardRow();
         for (int i = 1; i < daysInMonth + 1; i++) {
             if (i <= 8) {
-                row1.add(InlineKeyboardButton.builder().text(String.valueOf(i)).callbackData(MessageFormat.format("/day{0}", i)).build());
+                row1.add(InlineKeyboardButton.builder().text(String.valueOf(i)).callbackData(MessageFormat.format("/day{0} {1}", i, monthName)).build());
             } else if (i <= 16) {
-                row2.add(InlineKeyboardButton.builder().text(String.valueOf(i)).callbackData(MessageFormat.format("/day{0}", i)).build());
+                row2.add(InlineKeyboardButton.builder().text(String.valueOf(i)).callbackData(MessageFormat.format("/day{0} {1}", i, monthName)).build());
             } else if (i <= 24) {
-                row3.add(InlineKeyboardButton.builder().text(String.valueOf(i)).callbackData(MessageFormat.format("/day{0}", i)).build());
+                row3.add(InlineKeyboardButton.builder().text(String.valueOf(i)).callbackData(MessageFormat.format("/day{0} {1}", i, monthName)).build());
             } else {
-                row4.add(InlineKeyboardButton.builder().text(String.valueOf(i)).callbackData(MessageFormat.format("/day{0}", i)).build());
+                row4.add(InlineKeyboardButton.builder().text(String.valueOf(i)).callbackData(MessageFormat.format("/day{0} {1}", i, monthName)).build());
             }
         }
 

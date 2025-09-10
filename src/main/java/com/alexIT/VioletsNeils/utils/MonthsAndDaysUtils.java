@@ -13,7 +13,8 @@ import java.util.Map;
 @Component
 public class MonthsAndDaysUtils {
 
-    private MonthsAndDaysUtils() {}
+    private MonthsAndDaysUtils() {
+    }
 
     public static Map<String, String> getMonthsAsString() {
         Locale loc = Locale.forLanguageTag("ru");
@@ -45,4 +46,20 @@ public class MonthsAndDaysUtils {
         YearMonth yearMonth = YearMonth.of(year, monthNumber);
         return yearMonth.lengthOfMonth();
     }
+
+    public static final Map<String, String> monthGenitiveForms = Map.ofEntries(
+            Map.entry("январь", "января"),
+            Map.entry("февраль", "февраля"),
+            Map.entry("март", "марта"),
+            Map.entry("апрель", "апреля"),
+            Map.entry("май", "мая"),
+            Map.entry("июнь", "июня"),
+            Map.entry("июль", "июля"),
+            Map.entry("август", "августа"),
+            Map.entry("сентябрь", "сентября"),
+            Map.entry("октябрь", "октября"),
+            Map.entry("ноябрь", "ноября"),
+            Map.entry("декабрь", "декабря")
+    );
+
 }

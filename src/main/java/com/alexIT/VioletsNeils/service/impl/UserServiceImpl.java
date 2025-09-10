@@ -4,18 +4,18 @@ import com.alexIT.VioletsNeils.dto.TgUserDto;
 import com.alexIT.VioletsNeils.entity.TgUser;
 import com.alexIT.VioletsNeils.enums.RoleUser;
 import com.alexIT.VioletsNeils.repository.TgUserRepository;
-import com.alexIT.VioletsNeils.service.TgUserService;
+import com.alexIT.VioletsNeils.service.UserService;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.Optional;
 
 @Service
-public class TgUserServiceImpl implements TgUserService {
+public class UserServiceImpl implements UserService {
 
     private final TgUserRepository repository;
 
-    public TgUserServiceImpl(TgUserRepository repository) {
+    public UserServiceImpl(TgUserRepository repository) {
         this.repository = repository;
     }
 

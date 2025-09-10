@@ -3,15 +3,17 @@ package com.alexIT.VioletsNeils.entity;
 import com.alexIT.VioletsNeils.enums.RoleUser;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Data
 @ToString
 @Entity
+@NoArgsConstructor
 public class TgUser {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long userId;
 
     @Column(name = "chat_id")

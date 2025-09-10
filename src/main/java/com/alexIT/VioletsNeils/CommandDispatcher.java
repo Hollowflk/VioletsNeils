@@ -4,7 +4,7 @@ import com.alexIT.VioletsNeils.commands.Command;
 import com.alexIT.VioletsNeils.commands.UnknowCommand;
 import com.alexIT.VioletsNeils.convector.Convector;
 import com.alexIT.VioletsNeils.dto.TgUserDto;
-import com.alexIT.VioletsNeils.service.impl.TgUserServiceImpl;
+import com.alexIT.VioletsNeils.service.impl.UserServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
@@ -18,18 +18,20 @@ public class CommandDispatcher {
 
     private final List<Command> commandList;
     private final UnknowCommand unknowCommand;
-    private final TgUserServiceImpl userService;
+    private final UserServiceImpl userServiceImpl;
 
-    public CommandDispatcher(List<Command> commandList, UnknowCommand unknowCommand, TgUserServiceImpl userService, Convector convector) {
+    public CommandDispatcher(List<Command> commandList, UnknowCommand unknowCommand, UserServiceImpl userService) {
         this.commandList = commandList;
         this.unknowCommand = unknowCommand;
-        this.userService = userService;
+        this.userServiceImpl = userService;
     }
 
     public BotApiMethod<?> handler(Update update) {
-        TgUserDto userDto = userService.createUserDto(update);
+        TgUserDto userDto = userServiceImpl.createUserDto(update);
+        String textCommand = getText(update);
+        log.info("Получена команда {}", textCommand);
         Command command = commandList.stream()
-                .filter(cmd -> cmd.supports(getText(update)))
+                .filter(cmd -> cmd.supports(textCommand))
                 .findFirst()
                 .orElse(unknowCommand);
         log.info("Выполняется команда {}", command.getClass().getName());

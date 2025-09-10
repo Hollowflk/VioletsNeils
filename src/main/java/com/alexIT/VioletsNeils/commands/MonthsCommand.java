@@ -10,6 +10,8 @@ import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageTe
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 import java.time.Month;
+import java.time.format.TextStyle;
+import java.util.Locale;
 import java.util.Map;
 
 @Component
@@ -31,7 +33,8 @@ public class MonthsCommand implements Command{
         Map<String, Month> monthMap = MonthsAndDaysUtils.getMonthsAsValues();
         key = key.substring(1);
         int daysInMonth = MonthsAndDaysUtils.getDaysOfMonth(monthMap.get(key));
-        KeyboardBuilder keyboardBuilder = new DaysKeyboardBuilder(daysInMonth);
+        String month = monthMap.get(key).getDisplayName(TextStyle.FULL_STANDALONE, Locale.forLanguageTag("ru"));
+        KeyboardBuilder keyboardBuilder = new DaysKeyboardBuilder(daysInMonth, month);
         InlineKeyboardMarkup keyboard = keyboardBuilder.build();
         return EditMessageText.builder()
                 .chatId(userDto.getChatId())

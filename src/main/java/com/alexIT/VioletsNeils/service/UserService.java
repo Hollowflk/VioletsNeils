@@ -5,7 +5,7 @@ import com.alexIT.VioletsNeils.entity.TgUser;
 
 import java.util.Optional;
 
-public interface TgUserService {
+public interface UserService {
 
     Optional<TgUser> findById(Long id);
 
