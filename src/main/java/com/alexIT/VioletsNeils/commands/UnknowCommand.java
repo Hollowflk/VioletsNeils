@@ -1,5 +1,6 @@
 package com.alexIT.VioletsNeils.commands;
 
+import com.alexIT.VioletsNeils.dto.TgUserDto;
 import com.alexIT.VioletsNeils.entity.TgUser;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
@@ -13,9 +14,9 @@ public class UnknowCommand implements Command {
     }
 
     @Override
-    public BotApiMethod<?> handler(TgUser tgUser) {
+    public BotApiMethod<?> handler(TgUserDto userDto) {
         return SendMessage.builder()
-                .chatId(tgUser.getChatId())
+                .chatId(userDto.getChatId())
                 .text("Неизвестная команда")
                 .build();
     }

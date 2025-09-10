@@ -1,5 +1,6 @@
 package com.alexIT.VioletsNeils.commands;
 
+import com.alexIT.VioletsNeils.dto.TgUserDto;
 import com.alexIT.VioletsNeils.entity.TgUser;
 import com.alexIT.VioletsNeils.enums.RoleUser;
 import com.alexIT.VioletsNeils.keyboards.AdminKeyboardBuilder;
@@ -22,8 +23,8 @@ public class MenuCommand implements Command{
     }
 
     @Override
-    public BotApiMethod<?> handler(TgUser tgUser) {
-        RoleUser role = tgUser.getRole();
+    public BotApiMethod<?> handler(TgUserDto userDto) {
+        RoleUser role = userDto.getRole();
         KeyboardBuilder builder;
         if (RoleUser.ADMIN.equals(role)) {
             builder = adminKeyboardBuilder;
@@ -34,7 +35,7 @@ public class MenuCommand implements Command{
         InlineKeyboardMarkup keyboard = builder.build();
 
         return SendMessage.builder()
-                .chatId(tgUser.getChatId())
+                .chatId(userDto.getChatId())
                 .text("Выберите услугу.")
                 .replyMarkup(keyboard)
                 .build();

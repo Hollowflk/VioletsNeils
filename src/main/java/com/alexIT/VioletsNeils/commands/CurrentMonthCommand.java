@@ -1,6 +1,6 @@
 package com.alexIT.VioletsNeils.commands;
 
-import com.alexIT.VioletsNeils.entity.TgUser;
+import com.alexIT.VioletsNeils.dto.TgUserDto;
 import com.alexIT.VioletsNeils.keyboards.DaysKeyboardBuilder;
 import com.alexIT.VioletsNeils.keyboards.KeyboardBuilder;
 import com.alexIT.VioletsNeils.utils.MonthsAndDaysUtils;
@@ -20,14 +20,14 @@ public class CurrentMonthCommand implements Command{
     }
 
     @Override
-    public BotApiMethod<?> handler(TgUser tgUser) {
+    public BotApiMethod<?> handler(TgUserDto userDto) {
         Map<String, Month> monthMap = MonthsAndDaysUtils.getMonthsAsValues();
         int daysInMonth = MonthsAndDaysUtils.getDaysOfMonth(monthMap.get("currentMonth"));
         KeyboardBuilder keyboardBuilder = new DaysKeyboardBuilder(daysInMonth);
         InlineKeyboardMarkup keyboard = keyboardBuilder.build();
         return EditMessageText.builder()
-                .chatId(tgUser.getChatId())
-                .messageId(tgUser.getMessageId())
+                .chatId(userDto.getChatId())
+                .messageId(userDto.getMessageId())
                 .text("Выберите день.")
                 .replyMarkup(keyboard)
                 .build();

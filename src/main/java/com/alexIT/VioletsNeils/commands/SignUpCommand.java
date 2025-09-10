@@ -1,6 +1,6 @@
 package com.alexIT.VioletsNeils.commands;
 
-import com.alexIT.VioletsNeils.entity.TgUser;
+import com.alexIT.VioletsNeils.dto.TgUserDto;
 import com.alexIT.VioletsNeils.keyboards.KeyboardBuilder;
 import com.alexIT.VioletsNeils.keyboards.MonthKeyboardBuilder;
 import org.springframework.stereotype.Component;
@@ -16,12 +16,12 @@ public class SignUpCommand implements Command{
     }
 
     @Override
-    public BotApiMethod<?> handler(TgUser tgUser) {
+    public BotApiMethod<?> handler(TgUserDto userDto) {
         KeyboardBuilder keyboardBuilder = new MonthKeyboardBuilder();
         InlineKeyboardMarkup keyboard = keyboardBuilder.build();
         return EditMessageText.builder()
-                .chatId(tgUser.getChatId())
-                .messageId(tgUser.getMessageId())
+                .chatId(userDto.getChatId())
+                .messageId(userDto.getMessageId())
                 .text("Выберите месяц для записи.")
                 .replyMarkup(keyboard)
                 .build();

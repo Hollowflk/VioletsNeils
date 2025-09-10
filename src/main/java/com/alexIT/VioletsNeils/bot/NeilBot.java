@@ -17,9 +17,9 @@ public class NeilBot implements LongPollingSingleThreadUpdateConsumer {
     private final TelegramClient client;
     private final CommandDispatcher commandDispatcher;
 
-    public NeilBot(TelegramClient client) {
+    public NeilBot(TelegramClient client, CommandDispatcher commandDispatcher) {
         this.client = client;
-        commandDispatcher = new CommandDispatcher();
+        this.commandDispatcher = commandDispatcher;
     }
 
     @Override

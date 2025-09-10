@@ -4,9 +4,9 @@ import com.alexIT.VioletsNeils.bot.NeilBot;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
-import org.springframework.core.env.StandardEnvironment;
 import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient;
 import org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
@@ -16,10 +16,11 @@ import org.telegram.telegrambots.meta.generics.TelegramClient;
 public class VioletsNeilsApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(VioletsNeilsApplication.class, args);
-        StandardEnvironment env = new StandardEnvironment();
+        ConfigurableApplicationContext context = SpringApplication.run(VioletsNeilsApplication.class, args);
         try (TelegramBotsLongPollingApplication application = new TelegramBotsLongPollingApplication()) {
-            application.registerBot(env.getProperty("token"), new NeilBot(getTelegramClient(env)));
+            NeilBot neilBot = context.getBean(NeilBot.class);
+            String token = context.getEnvironment().getProperty("token");
+            application.registerBot(token, neilBot);
             log.info("Бот запущен!");
             Thread.currentThread().join();
         } catch (Exception e) {
