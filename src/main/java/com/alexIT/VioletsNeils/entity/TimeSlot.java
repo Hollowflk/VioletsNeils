@@ -13,12 +13,12 @@ public class TimeSlot {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "time")
+    private LocalTime time;
+
     @ManyToOne
     @JoinColumn(name = "daily_id")
     private DailyRecord dailyRecord;
-
-    @Column(name = "time")
-    private LocalTime time;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
