@@ -36,12 +36,18 @@ public class DaysKeyboardBuilder implements KeyboardBuilder {
             }
         }
 
+        InlineKeyboardButton back = InlineKeyboardButton.builder()
+                .text("Назад")
+                .callbackData("/signUp")
+                .build();
+
         return InlineKeyboardMarkup.builder()
                 .keyboard(List.of(
                         row1,
                         row2,
                         row3,
-                        row4
+                        row4,
+                        new InlineKeyboardRow(back)
                 )).build();
     }
 

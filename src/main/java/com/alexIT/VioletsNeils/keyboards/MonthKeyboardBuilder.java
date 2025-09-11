@@ -17,6 +17,11 @@ public class MonthKeyboardBuilder implements KeyboardBuilder
         List<InlineKeyboardRow> rows = new ArrayList<>();
         rows.add(addButton(monthMap.get("currentMonth"), "/currentMonth"));
         rows.add(addButton(monthMap.get("nextMonth"), "/nextMonth"));
+        InlineKeyboardButton back = InlineKeyboardButton.builder()
+                .text("Назад")
+                .callbackData("/menu")
+                .build();
+        rows.add(new InlineKeyboardRow(back));
         return new InlineKeyboardMarkup(rows);
     }
 
