@@ -2,7 +2,6 @@ package com.alexIT.VioletsNeils;
 
 import com.alexIT.VioletsNeils.commands.Command;
 import com.alexIT.VioletsNeils.commands.UnknowCommand;
-import com.alexIT.VioletsNeils.convector.Convector;
 import com.alexIT.VioletsNeils.dto.TgUserDto;
 import com.alexIT.VioletsNeils.service.impl.UserServiceImpl;
 import lombok.extern.slf4j.Slf4j;
