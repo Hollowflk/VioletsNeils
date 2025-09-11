@@ -1,18 +1,24 @@
 package com.alexIT.VioletsNeils.commands;
 
 import com.alexIT.VioletsNeils.dto.TgUserDto;
+import com.alexIT.VioletsNeils.keyboards.KeyboardBuilder;
+import com.alexIT.VioletsNeils.keyboards.TimeKeyboardBuilder;
 import com.alexIT.VioletsNeils.utils.MonthsAndDaysUtils;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
-import java.text.MessageFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Component
 public class DayCommand implements Command{
 
+    private static final String INFO = """
+            Вы выбрали дату: %d %s.
+            Выберите время для записи
+            """;
     private int day;
     private String monthName;
 
@@ -24,6 +30,7 @@ public class DayCommand implements Command{
         if (matcher.matches()) {
             day = Integer.parseInt(matcher.group(1));
             monthName = matcher.group(2);
+            monthName = MonthsAndDaysUtils.monthGenitiveForms.get(monthName);
             return true;
         }
         return false;
@@ -31,10 +38,13 @@ public class DayCommand implements Command{
 
     @Override
     public BotApiMethod<?> handler(TgUserDto userDto) {
+        KeyboardBuilder keyboardBuilder = new TimeKeyboardBuilder();
+        InlineKeyboardMarkup keyboard = keyboardBuilder.build();
         return EditMessageText.builder()
                 .chatId(userDto.getChatId())
                 .messageId(userDto.getMessageId())
-                .text(MessageFormat.format("Вы выбрали дату для записи: {0} {1}", day, MonthsAndDaysUtils.monthGenitiveForms.get(monthName)))
+                .text(String.format(INFO, day, monthName))
+                .replyMarkup(keyboard)
                 .build();
     }
 }
