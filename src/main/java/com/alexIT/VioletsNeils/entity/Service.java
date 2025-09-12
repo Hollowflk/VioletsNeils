@@ -3,8 +3,6 @@ package com.alexIT.VioletsNeils.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.Duration;
-
 @Data
 @Entity
 @Table(name = "service")
@@ -21,7 +19,7 @@ public class Service {
     private int price;
 
     @Column(name = "duration")
-    private Duration duration;
+    private String duration;
 
     @ManyToOne
     @JoinColumn(name = "category_id")

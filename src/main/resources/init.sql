@@ -45,3 +45,35 @@ create table time_slot (
         REFERENCES tg_user (userId)
         ON DELETE CASCADE
 );
+
+insert into service_category (name) values ('Педикюр');
+insert into service_category (name) values ('Маникюр');
+insert into service_category (name) values ('Наращивание ногтей');
+
+insert into service (name, price, duration, category_id)
+values ('Гигиеническая обработка пальчиков ног без покрытия',
+900, interval '1 hour 15 minutes', 1);
+
+insert into service (name, price, duration, category_id)
+values ('Гигиеническая обработка пальчиков ног с покрытием гель-лак',
+1800, interval '2 hour', 1);
+
+insert into service (name, price, duration, category_id)
+values ('Гигиеническая обработка стоп и пальчиков без покрытия',
+1800, interval '1 hour 30 minutes', 1);
+
+insert into service (name, price, duration, category_id)
+values ('Полная обработка стоп и пальчиков с покрытием гель-лак',
+2000, interval '2 hour', 1);
+
+insert into service (name, price, duration, category_id)
+values ('Наращивание ногтей до 3, покрытие в один тон',
+2000, interval '2 hour 30 minutes', 2);
+
+insert into service (name, price, duration, category_id)
+values ('Гигиенический маникюр без покрытия',
+800, interval '1 hour 15 minutes', 3);
+
+insert into service (name, price, duration, category_id)
+values ('Маникюр с укреплением жестким гелем+покрытием гель-лак однотон',
+1700, interval '2 hour', 3);

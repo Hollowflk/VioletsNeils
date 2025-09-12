@@ -1,7 +1,6 @@
 package com.alexIT.VioletsNeils.commands;
 
 import com.alexIT.VioletsNeils.dto.TgUserDto;
-import com.alexIT.VioletsNeils.entity.TgUser;
 import com.alexIT.VioletsNeils.enums.RoleUser;
 import com.alexIT.VioletsNeils.keyboards.AdminKeyboardBuilder;
 import com.alexIT.VioletsNeils.keyboards.DefaultKeyboardBuilder;
@@ -36,7 +35,7 @@ public class MenuCommand implements Command{
 
         return SendMessage.builder()
                 .chatId(userDto.getChatId())
-                .text("Выберите услугу.")
+                .text("Выберите действие.")
                 .replyMarkup(keyboard)
                 .build();
     }
