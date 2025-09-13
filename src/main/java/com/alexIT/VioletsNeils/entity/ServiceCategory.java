@@ -1,11 +1,14 @@
 package com.alexIT.VioletsNeils.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.List;
 
-@Data
+@Setter
+@Getter
 @Entity
 public class ServiceCategory {
 
@@ -16,6 +19,7 @@ public class ServiceCategory {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "category",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<Service> serviceList;
 }

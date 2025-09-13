@@ -3,18 +3,22 @@ package com.alexIT.VioletsNeils.commands;
 import com.alexIT.VioletsNeils.dto.TgUserDto;
 import com.alexIT.VioletsNeils.keyboards.KeyboardBuilder;
 import com.alexIT.VioletsNeils.keyboards.ServiceCategoryKeyboardBuilder;
-import com.alexIT.VioletsNeils.service.ServiceCategoryService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
+@Slf4j
 @Component
 public class SignUpCommand implements Command{
 
-    @Autowired
-    private ServiceCategoryService categoryService;
+
+    private final ServiceCategoryKeyboardBuilder serviceCategoryKeyboardBuilder;
+
+    public SignUpCommand(ServiceCategoryKeyboardBuilder serviceCategoryKeyboardBuilder) {
+        this.serviceCategoryKeyboardBuilder = serviceCategoryKeyboardBuilder;
+    }
 
     @Override
     public boolean supports(String text) {
@@ -23,8 +27,8 @@ public class SignUpCommand implements Command{
 
     @Override
     public BotApiMethod<?> handler(TgUserDto userDto) {
-        KeyboardBuilder keyboardBuilder = new ServiceCategoryKeyboardBuilder(categoryService);
-        InlineKeyboardMarkup keyboard = keyboardBuilder.build();
+        InlineKeyboardMarkup keyboard = serviceCategoryKeyboardBuilder.build();
+        log.info("Клавиатура получена");
         return EditMessageText.builder()
                 .chatId(userDto.getChatId())
                 .messageId(userDto.getMessageId())

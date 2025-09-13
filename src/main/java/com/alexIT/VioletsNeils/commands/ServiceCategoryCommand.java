@@ -23,7 +23,6 @@ public class ServiceCategoryCommand implements Command{
     public boolean supports(String text) {
         if (text != null && text.startsWith("/service_category_")) {
             serviceCategoryId = Integer.parseInt(text.substring(18));
-            System.out.println(serviceCategoryId);
             return true;
         }
         return false;

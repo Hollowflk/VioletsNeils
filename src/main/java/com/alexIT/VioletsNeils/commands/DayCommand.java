@@ -1,8 +1,8 @@
 package com.alexIT.VioletsNeils.commands;
 
 import com.alexIT.VioletsNeils.dto.TgUserDto;
+import com.alexIT.VioletsNeils.keyboards.DaysKeyboardBuilder;
 import com.alexIT.VioletsNeils.keyboards.KeyboardBuilder;
-import com.alexIT.VioletsNeils.keyboards.TimeKeyboardBuilder;
 import com.alexIT.VioletsNeils.utils.MonthsAndDaysUtils;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
@@ -13,7 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Component
-public class DayCommand implements Command{
+public class DayCommand implements Command {
 
     private static final String INFO = """
             Вы выбрали дату: %d %s.
@@ -21,7 +21,6 @@ public class DayCommand implements Command{
             """;
     private int day;
     private String monthName;
-
 
     @Override
     public boolean supports(String text) {
@@ -38,8 +37,10 @@ public class DayCommand implements Command{
 
     @Override
     public BotApiMethod<?> handler(TgUserDto userDto) {
-        KeyboardBuilder keyboardBuilder = new TimeKeyboardBuilder();
+        KeyboardBuilder keyboardBuilder = new DaysKeyboardBuilder(day, monthName);
         InlineKeyboardMarkup keyboard = keyboardBuilder.build();
+        // TODO: Убрать
+        System.out.println(userDto.getService());
         return EditMessageText.builder()
                 .chatId(userDto.getChatId())
                 .messageId(userDto.getMessageId())

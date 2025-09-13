@@ -8,32 +8,46 @@ import com.alexIT.VioletsNeils.service.UserService;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     private final TgUserRepository repository;
+    private final Map<Long, TgUserDto> userDtoMap = new ConcurrentHashMap<>();
 
     public UserServiceImpl(TgUserRepository repository) {
         this.repository = repository;
     }
 
     public TgUserDto createUserDto(Update update) {
+        Long userId;
+        Long chatId;
+        Integer messageId;
+
         if (!update.hasCallbackQuery()) {
-            return new TgUserDto(
-              update.getMessage().getFrom().getId(),
-              update.getMessage().getChatId(),
-              update.getMessage().getMessageId(),
-              RoleUser.USER
-            );
+            userId = update.getMessage().getFrom().getId();
+            chatId = update.getMessage().getChatId();
+            messageId = update.getMessage().getMessageId();
+        } else {
+            userId = update.getCallbackQuery().getFrom().getId();
+            chatId = update.getCallbackQuery().getMessage().getChatId();
+            messageId = update.getCallbackQuery().getMessage().getMessageId();
         }
-        return new TgUserDto(
-                update.getCallbackQuery().getFrom().getId(),
-                update.getCallbackQuery().getMessage().getChatId(),
-                update.getCallbackQuery().getMessage().getMessageId(),
-                RoleUser.USER
-        );
+
+        if (!userDtoMap.containsKey(userId)) {
+            TgUserDto userDto = new TgUserDto(
+                    userId,
+                    chatId,
+                    messageId,
+                    RoleUser.USER
+            );
+            userDtoMap.put(userId, userDto);
+            return userDto;
+        }
+        return userDtoMap.get(userId);
     }
 
     @Override

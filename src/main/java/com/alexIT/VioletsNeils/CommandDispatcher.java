@@ -17,16 +17,16 @@ public class CommandDispatcher {
 
     private final List<Command> commandList;
     private final UnknowCommand unknowCommand;
-    private final UserServiceImpl userServiceImpl;
+    private final UserServiceImpl userService;
 
     public CommandDispatcher(List<Command> commandList, UnknowCommand unknowCommand, UserServiceImpl userService) {
         this.commandList = commandList;
         this.unknowCommand = unknowCommand;
-        this.userServiceImpl = userService;
+        this.userService = userService;
     }
 
     public BotApiMethod<?> handler(Update update) {
-        TgUserDto userDto = userServiceImpl.createUserDto(update);
+        TgUserDto userDto = userService.createUserDto(update);
         String textCommand = getText(update);
         log.info("Получена команда {}", textCommand);
         Command command = commandList.stream()

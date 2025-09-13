@@ -2,6 +2,8 @@ package com.alexIT.VioletsNeils.keyboards;
 
 import com.alexIT.VioletsNeils.entity.ServiceCategory;
 import com.alexIT.VioletsNeils.service.ServiceCategoryService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
@@ -9,6 +11,8 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
+@Component
 public class ServiceCategoryKeyboardBuilder implements KeyboardBuilder{
 
     private final ServiceCategoryService serviceCategoryService;
@@ -21,6 +25,7 @@ public class ServiceCategoryKeyboardBuilder implements KeyboardBuilder{
     public InlineKeyboardMarkup build() {
         List<InlineKeyboardRow> rows = new ArrayList<>();
         List<ServiceCategory> serviceCategoryList = serviceCategoryService.findAll();
+        log.info("Найдены категории {}", serviceCategoryList.size());
         for (ServiceCategory category : serviceCategoryList) {
             rows.add(addButton(category.getName(), String.format("/service_category_%d", category.getId())));
         }
@@ -29,6 +34,7 @@ public class ServiceCategoryKeyboardBuilder implements KeyboardBuilder{
                 .callbackData("/menu")
                 .build();
         rows.add(new InlineKeyboardRow(back));
+        log.info("Клавиатура создана");
         return new InlineKeyboardMarkup(rows);
     }
 
