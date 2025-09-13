@@ -17,12 +17,6 @@ public class TgUser {
     @Column(name = "user_id")
     private Long userId;
 
-    @Column(name = "chat_id")
-    private Long chatId;
-
-    @Column(name = "message_id")
-    private Integer messageId;
-
     @Column(name = "full_name")
     private String fullName;
 
@@ -33,10 +27,8 @@ public class TgUser {
     @Column(name = "role")
     private RoleUser role;
 
-    public TgUser(Long userId ,Long chatId, Integer messageId, RoleUser role) {
+    public TgUser(Long userId,  RoleUser role) {
         this.userId = userId;
-        this.chatId = chatId;
-        this.messageId = messageId;
         this.role = role;
     }
 }

@@ -1,7 +1,5 @@
 create table tg_user (
    userId INTEGER PRIMARY KEY,
-   chatId BIGINT NOT NULL,
-   messageId INTEGER NOT NULL,
    fullName varchar(255),
    phoneNumber varchar(15),
    role varchar(255) NOT NULL

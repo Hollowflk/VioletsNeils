@@ -16,7 +16,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class UserServiceImpl implements UserService {
 
     private final TgUserRepository repository;
-    private final Map<Long, TgUserDto> userDtoMap = new ConcurrentHashMap<>();
 
     public UserServiceImpl(TgUserRepository repository) {
         this.repository = repository;
@@ -37,17 +36,7 @@ public class UserServiceImpl implements UserService {
             messageId = update.getCallbackQuery().getMessage().getMessageId();
         }
 
-        if (!userDtoMap.containsKey(userId)) {
-            TgUserDto userDto = new TgUserDto(
-                    userId,
-                    chatId,
-                    messageId,
-                    RoleUser.USER
-            );
-            userDtoMap.put(userId, userDto);
-            return userDto;
-        }
-        return userDtoMap.get(userId);
+        return new TgUserDto(userId, chatId, messageId, RoleUser.USER);
     }
 
     @Override
@@ -59,8 +48,6 @@ public class UserServiceImpl implements UserService {
     public TgUser save(TgUserDto dto) {
         TgUser tgUser = new TgUser(
                 dto.getUserId(),
-                dto.getChatId(),
-                dto.getMessageId(),
                 dto.getRole()
         );
         repository.save(tgUser);
