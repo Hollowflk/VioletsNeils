@@ -5,6 +5,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -15,8 +16,10 @@ public class MonthKeyboardBuilder implements KeyboardBuilder
     public InlineKeyboardMarkup build() {
         Map<String, String> monthMap = MonthsAndDaysUtils.getMonthsAsString();
         List<InlineKeyboardRow> rows = new ArrayList<>();
-        rows.add(addButton(monthMap.get("currentMonth"), "/currentMonth"));
-        rows.add(addButton(monthMap.get("nextMonth"), "/nextMonth"));
+        LocalDate currentMonth = LocalDate.now();
+        LocalDate nextMonth = currentMonth.plusMonths(1);
+        rows.add(addButton(monthMap.get("currentMonth"), String.format("/currentMonth_%s", currentMonth)));
+        rows.add(addButton(monthMap.get("nextMonth"), String.format("/nextMonth_%s", nextMonth)));
         InlineKeyboardButton back = InlineKeyboardButton.builder()
                 .text("Назад")
                 .callbackData("/menu")

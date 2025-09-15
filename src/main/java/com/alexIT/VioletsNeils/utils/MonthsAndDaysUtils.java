@@ -32,19 +32,16 @@ public class MonthsAndDaysUtils {
         return monthMap;
     }
 
-    public static Map<String, Month> getMonthsAsValues() {
-        Map<String, Month> monthMap = new HashMap<>();
-        LocalDate localDate = LocalDate.now();
-        monthMap.put("currentMonth", localDate.getMonth());
-        monthMap.put("nextMonth", localDate.getMonth().plus(1));
-        return monthMap;
-    }
-
-    public static int getDaysOfMonth(Month month) {
-        int year = LocalDate.now().getYear();
+    public static int getDaysOfMonth(Month month, int year) {
         int monthNumber = month.getValue();
         YearMonth yearMonth = YearMonth.of(year, monthNumber);
         return yearMonth.lengthOfMonth();
+    }
+
+    public static String getNameMonth(int month) {
+        Month mth = Month.of(month);
+        Locale loc = Locale.forLanguageTag("ru");
+        return mth.getDisplayName(TextStyle.FULL_STANDALONE, loc);
     }
 
     public static final Map<String, String> monthGenitiveForms = Map.ofEntries(

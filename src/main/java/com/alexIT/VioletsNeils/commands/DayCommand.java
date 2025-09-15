@@ -1,16 +1,18 @@
 package com.alexIT.VioletsNeils.commands;
 
 import com.alexIT.VioletsNeils.dto.TgUserDto;
-import com.alexIT.VioletsNeils.keyboards.DaysKeyboardBuilder;
+
 import com.alexIT.VioletsNeils.keyboards.KeyboardBuilder;
+import com.alexIT.VioletsNeils.keyboards.TimeKeyboardBuilder;
+import com.alexIT.VioletsNeils.session.UserSession;
+import com.alexIT.VioletsNeils.session.UserSessionManager;
 import com.alexIT.VioletsNeils.utils.MonthsAndDaysUtils;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.time.LocalDate;
 
 @Component
 public class DayCommand implements Command {
@@ -19,17 +21,23 @@ public class DayCommand implements Command {
             Вы выбрали дату: %d %s.
             Выберите время для записи
             """;
+    private final UserSessionManager sessionManager;
+    private int year;
+    private int month;
     private int day;
-    private String monthName;
+
+    public DayCommand(UserSessionManager sessionManager) {
+        this.sessionManager = sessionManager;
+    }
 
     @Override
     public boolean supports(String text) {
-        Pattern pattern = Pattern.compile("^/day([1-9]|[12][0-9]|3[01])\\s+(январь|февраль|март|апрель|май|июнь|июль|август|сентябрь|октябрь|ноябрь|декабрь)$");
-        Matcher matcher = pattern.matcher(text);
-        if (matcher.matches()) {
-            day = Integer.parseInt(matcher.group(1));
-            monthName = matcher.group(2);
-            monthName = MonthsAndDaysUtils.monthGenitiveForms.get(monthName);
+        if (text != null && text.startsWith("/date")) {
+            String[] splitText = text.split("_");
+            String[] date = splitText[1].split("-");
+            year = Integer.parseInt(date[0]);
+            month = Integer.parseInt(date[1]);
+            day = Integer.parseInt(date[2]);
             return true;
         }
         return false;
@@ -37,14 +45,16 @@ public class DayCommand implements Command {
 
     @Override
     public BotApiMethod<?> handler(TgUserDto userDto) {
-        KeyboardBuilder keyboardBuilder = new DaysKeyboardBuilder(day, monthName);
+        String monthName = MonthsAndDaysUtils.getNameMonth(month);
+        LocalDate selectedDate = LocalDate.of(year, month, day);
+        UserSession userSession = sessionManager.getOrCreateSession(userDto.getUserId());
+        userSession.setSelectedDate(selectedDate);
+        KeyboardBuilder keyboardBuilder = new TimeKeyboardBuilder();
         InlineKeyboardMarkup keyboard = keyboardBuilder.build();
-        // TODO: Убрать
-        System.out.println(userDto.getService());
         return EditMessageText.builder()
                 .chatId(userDto.getChatId())
                 .messageId(userDto.getMessageId())
-                .text(String.format(INFO, day, monthName))
+                .text(String.format(INFO, day, MonthsAndDaysUtils.monthGenitiveForms.get(monthName)))
                 .replyMarkup(keyboard)
                 .build();
     }

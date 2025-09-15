@@ -1,8 +1,8 @@
 package com.alexIT.VioletsNeils.commands;
 
 import com.alexIT.VioletsNeils.dto.TgUserDto;
-import com.alexIT.VioletsNeils.keyboards.KeyboardBuilder;
 import com.alexIT.VioletsNeils.keyboards.ServiceCategoryKeyboardBuilder;
+import com.alexIT.VioletsNeils.session.UserSessionManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
@@ -15,9 +15,11 @@ public class SignUpCommand implements Command{
 
 
     private final ServiceCategoryKeyboardBuilder serviceCategoryKeyboardBuilder;
+    private final UserSessionManager sessionManager;
 
-    public SignUpCommand(ServiceCategoryKeyboardBuilder serviceCategoryKeyboardBuilder) {
+    public SignUpCommand(ServiceCategoryKeyboardBuilder serviceCategoryKeyboardBuilder, UserSessionManager sessionManager) {
         this.serviceCategoryKeyboardBuilder = serviceCategoryKeyboardBuilder;
+        this.sessionManager = sessionManager;
     }
 
     @Override
@@ -27,8 +29,8 @@ public class SignUpCommand implements Command{
 
     @Override
     public BotApiMethod<?> handler(TgUserDto userDto) {
+        sessionManager.getOrCreateSession(userDto.getUserId());
         InlineKeyboardMarkup keyboard = serviceCategoryKeyboardBuilder.build();
-        log.info("Клавиатура получена");
         return EditMessageText.builder()
                 .chatId(userDto.getChatId())
                 .messageId(userDto.getMessageId())
