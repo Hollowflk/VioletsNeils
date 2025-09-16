@@ -8,14 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TimeKeyboardBuilder implements KeyboardBuilder{
+
     @Override
     public InlineKeyboardMarkup build() {
-        // TODO: Заглушка. Потом переделать.
         List<InlineKeyboardRow> rows = new ArrayList<>();
-        rows.add(addButton("Окно для записи", "/window1"));
-        rows.add(addButton("Окно для записи", "/window2"));
-        rows.add(addButton("Окно для записи", "/window3"));
-        rows.add(addButton("Окно для записи", "/window4"));
+        rows.add(addButton("с 10 до 12", "/window1"));
+        rows.add(addButton("с 12 до 14", "/window2"));
+        rows.add(addButton("с 15 до 17", "/window3"));
+        rows.add(addButton("с 17 до 19", "/window4"));
         return new InlineKeyboardMarkup(rows);
     }
 

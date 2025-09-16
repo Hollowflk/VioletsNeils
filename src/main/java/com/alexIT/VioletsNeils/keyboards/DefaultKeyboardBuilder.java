@@ -13,7 +13,6 @@ public class DefaultKeyboardBuilder implements KeyboardBuilder {
         List<InlineKeyboardRow> rows = new ArrayList<>();
         rows.add(addButton("Записаться", "/signUp"));
         rows.add(addButton("Посмотреть записи", "/showRecords"));
-        rows.add(addButton("Посмотреть свободные окна", "/showFreeRecords"));
         return new InlineKeyboardMarkup(rows);
     }
 
