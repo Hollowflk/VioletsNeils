@@ -5,6 +5,7 @@ import com.alexIT.VioletsNeils.entity.TgUser;
 import com.alexIT.VioletsNeils.enums.RoleUser;
 import com.alexIT.VioletsNeils.repository.TgUserRepository;
 import com.alexIT.VioletsNeils.service.UserService;
+import com.alexIT.VioletsNeils.session.UserSession;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -45,13 +46,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public TgUser save(TgUserDto dto) {
-        TgUser tgUser = new TgUser(
-                dto.getUserId(),
-                dto.getRole()
-        );
-        repository.save(tgUser);
-        return tgUser;
+    public TgUser save(TgUser user) {
+        repository.save(user);
+        return user;
     }
 
     @Override

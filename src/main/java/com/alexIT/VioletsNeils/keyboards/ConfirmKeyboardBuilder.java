@@ -4,19 +4,27 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class TimeKeyboardBuilder implements KeyboardBuilder{
+public class ConfirmKeyboardBuilder implements KeyboardBuilder{
 
     @Override
     public InlineKeyboardMarkup build() {
-        List<InlineKeyboardRow> rows = new ArrayList<>();
-        rows.add(addButton("на 10:00", "/record_10"));
-        rows.add(addButton("на 12:00", "/record_12"));
-        rows.add(addButton("на 15:00", "/record_15"));
-        rows.add(addButton("на 17:00", "/record_17"));
-        return new InlineKeyboardMarkup(rows);
+        InlineKeyboardButton yesButton = InlineKeyboardButton.builder()
+                .text("Да")
+                .callbackData("/confirm")
+                .build();
+
+        InlineKeyboardButton noButton = InlineKeyboardButton.builder()
+                .text("Нет")
+                .callbackData("/signUp")
+                .build();
+
+        InlineKeyboardRow row = new InlineKeyboardRow();
+        row.add(yesButton);
+        row.add(noButton);
+
+        return InlineKeyboardMarkup.builder().keyboard(List.of(row)).build();
     }
 
     @Override

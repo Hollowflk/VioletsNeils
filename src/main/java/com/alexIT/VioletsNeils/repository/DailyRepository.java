@@ -6,9 +6,11 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface DailyRepository extends JpaRepository<DailyRecord, Long> {
 
     List<DailyRecord> findAllByDateBetween(LocalDate start, LocalDate end);
+    Optional<DailyRecord> findByDate(LocalDate date);
 }

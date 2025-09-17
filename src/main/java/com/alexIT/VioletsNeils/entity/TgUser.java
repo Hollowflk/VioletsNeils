@@ -10,7 +10,7 @@ import lombok.ToString;
 @ToString
 @Entity
 @NoArgsConstructor
-@Table(name = "TgUser")
+@Table(name = "tg_user")
 public class TgUser {
 
     @Id
@@ -27,8 +27,15 @@ public class TgUser {
     @Column(name = "role")
     private RoleUser role;
 
-    public TgUser(Long userId,  RoleUser role) {
+    public TgUser(Long userId, RoleUser role) {
         this.userId = userId;
+        this.role = role;
+    }
+
+    public TgUser(Long userId, String fullName, String phoneNumber, RoleUser role) {
+        this.userId = userId;
+        this.fullName = fullName;
+        this.phoneNumber = phoneNumber;
         this.role = role;
     }
 }
