@@ -14,6 +14,7 @@ public class UserSessionManager {
         return sessions.computeIfAbsent(userId, UserSession::new);
     }
 
+    // TODO: Настроить авто удаление пользователей из сессии
     public void removeSession(Long userId) {
         sessions.remove(userId);
     }
