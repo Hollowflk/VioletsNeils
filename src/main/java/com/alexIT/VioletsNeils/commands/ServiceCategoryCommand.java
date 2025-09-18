@@ -1,6 +1,7 @@
 package com.alexIT.VioletsNeils.commands;
 
 import com.alexIT.VioletsNeils.dto.TgUserDto;
+import com.alexIT.VioletsNeils.entity.Service;
 import com.alexIT.VioletsNeils.keyboards.KeyboardBuilder;
 import com.alexIT.VioletsNeils.keyboards.ServiceKeyboardBuilder;
 import com.alexIT.VioletsNeils.service.ServiceService;
@@ -9,11 +10,18 @@ import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
+import java.util.List;
+
 @Component
 public class ServiceCategoryCommand implements Command{
 
     private int serviceCategoryId;
     private final ServiceService serviceService;
+    private static final String SERVICES_INFO = """
+            Наименование услуги:%n%s
+            Цена услуги: %s руб.
+            Продолжительность: %s
+            """;
 
     public ServiceCategoryCommand(ServiceService serviceService) {
         this.serviceService = serviceService;
@@ -35,8 +43,23 @@ public class ServiceCategoryCommand implements Command{
         return EditMessageText.builder()
                 .chatId(userDto.getChatId())
                 .messageId(userDto.getMessageId())
-                .text("Выберите услугу")
+                .text(createListInformationAboutServices())
                 .replyMarkup(keyboard)
                 .build();
+    }
+
+    private String createListInformationAboutServices() {
+        StringBuilder builder = new StringBuilder();
+        List<Service> serviceList = serviceService.findAllByCategoryId(serviceCategoryId);
+        builder.append("Список услуг.").append("\n");
+        for (Service service : serviceList) {
+            builder.append(String.format(SERVICES_INFO,
+                    service.getName(),
+                    service.getPrice(),
+                    service.getDuration()))
+                    .append("\n");
+        }
+        builder.append("Выберите услугу.");
+        return builder.toString();
     }
 }
