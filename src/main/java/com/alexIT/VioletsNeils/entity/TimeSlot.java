@@ -3,13 +3,14 @@ package com.alexIT.VioletsNeils.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalTime;
 
 @Data
 @NoArgsConstructor
 @Entity(name = "time_slot")
-public class TimeSlot {
+public class TimeSlot implements Comparable<TimeSlot>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,5 +36,10 @@ public class TimeSlot {
         this.dailyRecord = dailyRecord;
         this.service = service;
         this.user = user;
+    }
+
+    @Override
+    public int compareTo(@NotNull TimeSlot o) {
+        return dailyRecord.getDate().compareTo(o.getDailyRecord().getDate());
     }
 }
