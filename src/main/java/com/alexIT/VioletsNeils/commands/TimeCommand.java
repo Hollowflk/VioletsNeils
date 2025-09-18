@@ -37,7 +37,7 @@ public class TimeCommand implements Command{
     public boolean supports(String text) {
         if (text != null && text.startsWith("/record")) {
             String[] splitText = text.split("_");
-            timeRecord = LocalTime.of(Integer.parseInt(splitText[1]), 00);
+            timeRecord = LocalTime.of(Integer.parseInt(splitText[1]), 0, 0);
             return true;
         }
         return false;

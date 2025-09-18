@@ -21,12 +21,14 @@ public class DayCommand implements Command {
             Вы выбрали дату: %d %s.
             Выберите время для записи
             """;
+    private final TimeKeyboardBuilder timeKeyboardBuilder;
     private final UserSessionManager sessionManager;
     private int year;
     private int month;
     private int day;
 
-    public DayCommand(UserSessionManager sessionManager) {
+    public DayCommand(TimeKeyboardBuilder timeKeyboardBuilder, UserSessionManager sessionManager) {
+        this.timeKeyboardBuilder = timeKeyboardBuilder;
         this.sessionManager = sessionManager;
     }
 
@@ -49,8 +51,8 @@ public class DayCommand implements Command {
         LocalDate selectedDate = LocalDate.of(year, month, day);
         UserSession userSession = sessionManager.getOrCreateSession(userDto.getUserId());
         userSession.setSelectedDate(selectedDate);
-        KeyboardBuilder keyboardBuilder = new TimeKeyboardBuilder();
-        InlineKeyboardMarkup keyboard = keyboardBuilder.build();
+        timeKeyboardBuilder.setDate(selectedDate);
+        InlineKeyboardMarkup keyboard = timeKeyboardBuilder.build();
         return EditMessageText.builder()
                 .chatId(userDto.getChatId())
                 .messageId(userDto.getMessageId())

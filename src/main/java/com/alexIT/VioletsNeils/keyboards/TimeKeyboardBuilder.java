@@ -1,21 +1,59 @@
 package com.alexIT.VioletsNeils.keyboards;
 
+import com.alexIT.VioletsNeils.entity.DailyRecord;
+import com.alexIT.VioletsNeils.entity.TimeSlot;
+import com.alexIT.VioletsNeils.service.impl.DailyRecordServiceImpl;
+import lombok.Setter;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.*;
 
-public class TimeKeyboardBuilder implements KeyboardBuilder{
+@Component
+public class TimeKeyboardBuilder implements KeyboardBuilder {
+
+    private final DailyRecordServiceImpl recordService;
+
+    @Setter
+    private LocalDate date;
+
+    private static final Map<LocalTime, String> TIME_MAP = new LinkedHashMap<>();
+
+    public TimeKeyboardBuilder(DailyRecordServiceImpl recordService) {
+        this.recordService = recordService;
+        TIME_MAP.put(LocalTime.of(10, 0), "10:00");
+        TIME_MAP.put(LocalTime.of(12, 0), "12:00");
+        TIME_MAP.put(LocalTime.of(15, 0), "15:00");
+        TIME_MAP.put(LocalTime.of(17, 0), "17:00");
+    }
 
     @Override
     public InlineKeyboardMarkup build() {
         List<InlineKeyboardRow> rows = new ArrayList<>();
-        rows.add(addButton("на 10:00", "/record_10"));
-        rows.add(addButton("на 12:00", "/record_12"));
-        rows.add(addButton("на 15:00", "/record_15"));
-        rows.add(addButton("на 17:00", "/record_17"));
+        Set<LocalTime> occupiedTimes = new HashSet<>();
+
+        Optional<DailyRecord> optionalDailyRecord = recordService.findByDate(date);
+        if (optionalDailyRecord.isPresent()) {
+            List<TimeSlot> timeSlots = optionalDailyRecord.get().getTimeSlotList();
+            for (TimeSlot timeSlot : timeSlots) {
+                occupiedTimes.add(timeSlot.getTime());
+            }
+        }
+
+        for (Map.Entry<LocalTime, String> entry : TIME_MAP.entrySet()) {
+            if (!occupiedTimes.contains(entry.getKey())) {
+                String[] timeValue = entry.getValue().split(":");
+                rows.add(addButton(
+                        String.format("на %s", entry.getValue()),
+                        String.format("/record_%s", timeValue[0])
+                ));
+            }
+        }
+
         return new InlineKeyboardMarkup(rows);
     }
 

@@ -3,6 +3,7 @@ package com.alexIT.VioletsNeils.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ public class DailyRecord {
     private LocalDate date;
 
     @OneToMany(mappedBy = "dailyRecord", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ToString.Exclude
     private List<TimeSlot> timeSlotList = new ArrayList<>();
 
     public DailyRecord(LocalDate date) {

@@ -25,7 +25,6 @@ public class ServiceCategoryKeyboardBuilder implements KeyboardBuilder{
     public InlineKeyboardMarkup build() {
         List<InlineKeyboardRow> rows = new ArrayList<>();
         List<ServiceCategory> serviceCategoryList = serviceCategoryService.findAll();
-        log.info("Найдены категории {}", serviceCategoryList.size());
         for (ServiceCategory category : serviceCategoryList) {
             rows.add(addButton(category.getName(), String.format("/service_category_%d", category.getId())));
         }
@@ -34,7 +33,6 @@ public class ServiceCategoryKeyboardBuilder implements KeyboardBuilder{
                 .callbackData("/menu")
                 .build();
         rows.add(new InlineKeyboardRow(back));
-        log.info("Клавиатура создана");
         return new InlineKeyboardMarkup(rows);
     }
 
