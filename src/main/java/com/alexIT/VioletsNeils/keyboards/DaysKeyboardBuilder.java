@@ -73,7 +73,7 @@ public class DaysKeyboardBuilder implements KeyboardBuilder {
 
         InlineKeyboardButton back = InlineKeyboardButton.builder()
                 .text("Назад")
-                .callbackData("/signUp")
+                .callbackData("/chooseMonth")
                 .build();
         rows.add(new InlineKeyboardRow(back));
         return InlineKeyboardMarkup.builder().keyboard(rows).build();

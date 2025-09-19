@@ -21,7 +21,8 @@ public class ShowRecordsCommand implements Command{
     private static final String TIMESLOT_INFO = """
             День записи: %s
             Время записи: %s
-            Название услуги:%n%s%n
+            Название услуги:%n%s
+            Продолжительность: %s%n
             """;
 
     @Override
@@ -48,7 +49,8 @@ public class ShowRecordsCommand implements Command{
             builder.append(String.format(TIMESLOT_INFO,
                     timeSlot.getDailyRecord().getDate(),
                     timeSlot.getTime(),
-                    timeSlot.getService().getName()));
+                    timeSlot.getService().getName(),
+                    timeSlot.getService().getDuration()));
         }
         builder.append("\n");
         return builder.toString();

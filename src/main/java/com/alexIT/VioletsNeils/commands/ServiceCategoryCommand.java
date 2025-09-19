@@ -5,6 +5,7 @@ import com.alexIT.VioletsNeils.entity.Service;
 import com.alexIT.VioletsNeils.keyboards.KeyboardBuilder;
 import com.alexIT.VioletsNeils.keyboards.ServiceKeyboardBuilder;
 import com.alexIT.VioletsNeils.service.ServiceService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
@@ -13,6 +14,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class ServiceCategoryCommand implements Command{
 
     private int serviceCategoryId;
@@ -22,10 +24,6 @@ public class ServiceCategoryCommand implements Command{
             Цена услуги: %s руб.
             Продолжительность: %s
             """;
-
-    public ServiceCategoryCommand(ServiceService serviceService) {
-        this.serviceService = serviceService;
-    }
 
     @Override
     public boolean supports(String text) {

@@ -54,6 +54,12 @@ public class TimeKeyboardBuilder implements KeyboardBuilder {
             }
         }
 
+        InlineKeyboardButton backButton = InlineKeyboardButton.builder()
+                .text("Назад")
+                .callbackData("/chooseDate")
+                .build();
+
+        rows.add(new InlineKeyboardRow(backButton));
         return new InlineKeyboardMarkup(rows);
     }
 

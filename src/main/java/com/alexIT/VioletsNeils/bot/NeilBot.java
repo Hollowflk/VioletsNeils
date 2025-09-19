@@ -33,7 +33,7 @@ public class NeilBot implements LongPollingSingleThreadUpdateConsumer {
                 client.execute(message);
             }
         } catch (TelegramApiException e) {
-            log.debug(e.getMessage());
+            log.info(e.getMessage());
         }
     }
 }
