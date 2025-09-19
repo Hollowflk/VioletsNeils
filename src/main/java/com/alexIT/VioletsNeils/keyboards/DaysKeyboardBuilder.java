@@ -32,6 +32,10 @@ public class DaysKeyboardBuilder implements KeyboardBuilder {
         int daysInMonth = MonthsAndDaysUtils.getDaysOfMonth(month, year);
         int monthValue = month.getValue();
         int currentDay = LocalDate.now().getDayOfMonth();
+        LocalDate now = LocalDate.now();
+        if (month.getValue() > now.getMonth().getValue()) {
+            currentDay = 1;
+        }
 
         LocalDate start = LocalDate.of(year, monthValue, 1);
         LocalDate end = LocalDate.of(year, monthValue, daysInMonth);
