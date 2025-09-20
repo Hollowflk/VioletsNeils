@@ -5,17 +5,22 @@ import com.alexIT.VioletsNeils.dto.TgUserDto;
 import com.alexIT.VioletsNeils.entity.DailyRecord;
 import com.alexIT.VioletsNeils.entity.TgUser;
 import com.alexIT.VioletsNeils.entity.TimeSlot;
+import com.alexIT.VioletsNeils.enums.UserState;
 import com.alexIT.VioletsNeils.service.impl.DailyRecordServiceImpl;
 import com.alexIT.VioletsNeils.service.impl.UserServiceImpl;
 import com.alexIT.VioletsNeils.session.UserSession;
 import com.alexIT.VioletsNeils.session.UserSessionManager;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Component
+@RequiredArgsConstructor
 public class ConfirmCommand implements Command {
 
     private final UserSessionManager sessionManager;
@@ -23,30 +28,31 @@ public class ConfirmCommand implements Command {
     private final ConvectorUser convectorUser;
     private final UserServiceImpl userService;
 
-    public ConfirmCommand(UserSessionManager sessionManager, DailyRecordServiceImpl dailyRecordService, ConvectorUser convectorUser, UserServiceImpl userService) {
-        this.sessionManager = sessionManager;
-        this.dailyRecordService = dailyRecordService;
-        this.convectorUser = convectorUser;
-        this.userService = userService;
-    }
-
     @Override
     public boolean supports(String text) {
         return text != null && text.equals("/confirm");
     }
 
+    // TODO: Что сделать с сохранением пользователя
     @Override
     public BotApiMethod<?> handler(TgUserDto userDto) {
         UserSession session = sessionManager.getOrCreateSession(userDto.getUserId());
 
-        TgUser user = getOrCreateUser(userDto, session);
-        DailyRecord dailyRecord = getOrCreateDailyRecord(session.getSelectedDate());
+        if (session.getState().equals(UserState.COMPLETED)) {
 
-        createAndAddTimeSlot(dailyRecord, session, user);
-        dailyRecordService.save(dailyRecord);
+            userDto.setFullName(session.getFullName());
+            userDto.setPhoneNumber(session.getPhoneNumber());
 
-        sessionManager.removeSession(user.getUserId());
-        return buildSuccessMessage(userDto);
+            TgUser user = getOrCreateUser(userDto, session);
+            DailyRecord dailyRecord = getOrCreateDailyRecord(session.getSelectedDate());
+
+            createAndAddTimeSlot(dailyRecord, session, user);
+            dailyRecordService.save(dailyRecord);
+
+            sessionManager.removeSession(user.getUserId());
+            return buildSuccessMessage(userDto);
+        }
+        return buildFailedMessage(userDto);
     }
 
     private TgUser getOrCreateUser(TgUserDto dto, UserSession session) {
@@ -77,6 +83,13 @@ public class ConfirmCommand implements Command {
                 .chatId(dto.getChatId())
                 .messageId(dto.getMessageId())
                 .text("Вы успешно записаны!")
+                .build();
+    }
+
+    private SendMessage buildFailedMessage(TgUserDto dto) {
+        return SendMessage.builder()
+                .chatId(dto.getChatId())
+                .text("Вы ввели не все данные для записи!")
                 .build();
     }
 }

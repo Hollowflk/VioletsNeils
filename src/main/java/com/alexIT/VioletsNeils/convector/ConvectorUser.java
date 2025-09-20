@@ -11,8 +11,8 @@ public class ConvectorUser {
     public TgUser convertDtoInUser(TgUserDto dto) {
         return new TgUser(
                 dto.getUserId(),
-                "noName",
-                "noPhone",
+                dto.getFullName(),
+                dto.getPhoneNumber(),
                 RoleUser.USER
         );
     }

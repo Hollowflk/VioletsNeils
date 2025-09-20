@@ -7,22 +7,19 @@ import com.alexIT.VioletsNeils.session.UserSessionManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
-
-import java.time.LocalTime;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 @Component
 @RequiredArgsConstructor
-public class TimeCommand implements Command {
+public class PhoneNumberCommand implements Command {
 
-    private LocalTime timeRecord;
     private final UserSessionManager sessionManager;
+    private String phoneNumber;
 
     @Override
     public boolean supports(String text) {
-        if (text != null && text.startsWith("/record")) {
-            String[] splitText = text.split("_");
-            timeRecord = LocalTime.of(Integer.parseInt(splitText[1]), 0, 0);
+        if (text.matches("^8\\d{10}$")) {
+            phoneNumber = text;
             return true;
         }
         return false;
@@ -31,12 +28,11 @@ public class TimeCommand implements Command {
     @Override
     public BotApiMethod<?> handler(TgUserDto userDto) {
         UserSession userSession = sessionManager.getOrCreateSession(userDto.getUserId());
-        userSession.setSelectedTime(timeRecord);
-        userSession.setState(UserState.WAIT_PHONE);
-        return EditMessageText.builder()
+        userSession.setPhoneNumber(phoneNumber);
+        userSession.setState(UserState.WAIT_NAME);
+        return SendMessage.builder()
                 .chatId(userDto.getChatId())
-                .messageId(userDto.getMessageId())
-                .text("Введите номер телефона.")
+                .text("Введите ФИО")
                 .build();
     }
 }

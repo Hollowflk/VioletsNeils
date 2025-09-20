@@ -13,6 +13,8 @@ public class TgUserDto {
     private Integer messageId;
     private RoleUser role;
     private Service service;
+    private String fullName;
+    private String phoneNumber;
 
     public TgUserDto(Long userId, Long chatId, Integer messageId, RoleUser role) {
         this.userId = userId;
