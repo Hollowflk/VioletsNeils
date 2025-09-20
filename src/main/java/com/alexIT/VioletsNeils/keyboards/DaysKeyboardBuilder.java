@@ -56,7 +56,7 @@ public class DaysKeyboardBuilder implements KeyboardBuilder {
             if (fullyBookedDates.contains(date)) {
                 button = InlineKeyboardButton.builder()
                         .text("🚫" + i)
-                        .callbackData("noop_" + date)
+                        .callbackData(String.format("/data_busy_%s", date))
                         .build();
             } else {
                 button = InlineKeyboardButton.builder()
