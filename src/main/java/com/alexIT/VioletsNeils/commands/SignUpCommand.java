@@ -1,6 +1,7 @@
 package com.alexIT.VioletsNeils.commands;
 
 import com.alexIT.VioletsNeils.dto.TgUserDto;
+import com.alexIT.VioletsNeils.enums.UserState;
 import com.alexIT.VioletsNeils.keyboards.impl.ServiceCategoryKeyboardBuilder;
 import com.alexIT.VioletsNeils.session.UserSessionManager;
 import lombok.extern.slf4j.Slf4j;
@@ -23,8 +24,8 @@ public class SignUpCommand implements Command{
     }
 
     @Override
-    public boolean supports(String text) {
-        return text != null && text.equals("/signUp");
+    public boolean supports(String text, UserState state) {
+        return text != null && text.equals("/signUp") && state.equals(UserState.PREPARED);
     }
 
     @Override

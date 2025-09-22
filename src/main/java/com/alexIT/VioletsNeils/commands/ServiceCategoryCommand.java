@@ -2,6 +2,7 @@ package com.alexIT.VioletsNeils.commands;
 
 import com.alexIT.VioletsNeils.dto.TgUserDto;
 import com.alexIT.VioletsNeils.entity.Service;
+import com.alexIT.VioletsNeils.enums.UserState;
 import com.alexIT.VioletsNeils.keyboards.KeyboardBuilder;
 import com.alexIT.VioletsNeils.keyboards.impl.ServiceKeyboardBuilder;
 import com.alexIT.VioletsNeils.service.ServiceService;
@@ -26,8 +27,8 @@ public class ServiceCategoryCommand implements Command{
             """;
 
     @Override
-    public boolean supports(String text) {
-        if (text != null && text.startsWith("/service_category_")) {
+    public boolean supports(String text, UserState state) {
+        if (text != null && text.startsWith("/service_category_") && state.equals(UserState.PREPARED)) {
             serviceCategoryId = Integer.parseInt(text.substring(18));
             return true;
         }

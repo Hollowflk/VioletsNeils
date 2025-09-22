@@ -1,6 +1,7 @@
 package com.alexIT.VioletsNeils.commands;
 
 import com.alexIT.VioletsNeils.dto.TgUserDto;
+import com.alexIT.VioletsNeils.enums.UserState;
 import com.alexIT.VioletsNeils.keyboards.impl.MonthKeyboardBuilder;
 import com.alexIT.VioletsNeils.service.ServiceService;
 import com.alexIT.VioletsNeils.session.UserSession;
@@ -21,8 +22,8 @@ public class ServiceCommand implements Command{
     private final MonthKeyboardBuilder monthKeyboardBuilder;
 
     @Override
-    public boolean supports(String text) {
-        if (text != null && text.startsWith("/service_id")) {
+    public boolean supports(String text, UserState state) {
+        if (text != null && text.startsWith("/service_id") && state.equals(UserState.PREPARED)) {
             serviceId = Long.parseLong(text.substring(11));
             return true;
         }

@@ -12,7 +12,7 @@ import java.time.LocalTime;
 @Setter
 public class UserSession {
 
-    private UserState state = UserState.NEW_USER;
+    private UserState state;
     private final Long userId;
     private Service selectedService;
     private LocalDate selectedDate;
@@ -21,6 +21,7 @@ public class UserSession {
     private String fullName;
 
     public UserSession(Long userId) {
+        state = UserState.NEW_USER;
         this.userId = userId;
     }
 }

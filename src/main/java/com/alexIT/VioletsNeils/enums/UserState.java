@@ -4,5 +4,6 @@ public enum UserState {
     NEW_USER,
     WAIT_PHONE,
     WAIT_NAME,
+    PREPARED,
     COMPLETED
 }

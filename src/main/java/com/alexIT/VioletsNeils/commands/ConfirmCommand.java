@@ -12,17 +12,14 @@ import com.alexIT.VioletsNeils.service.impl.UserServiceImpl;
 import com.alexIT.VioletsNeils.session.UserSession;
 import com.alexIT.VioletsNeils.session.UserSessionManager;
 import lombok.RequiredArgsConstructor;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -35,30 +32,24 @@ public class ConfirmCommand implements Command {
     private final TimeSlotService timeSlotService;
 
     @Override
-    public boolean supports(String text) {
-        return text != null && text.equals("/confirm");
+    public boolean supports(String text, UserState state) {
+        return text != null && text.equals("/confirm") && state.equals(UserState.COMPLETED);
     }
 
-    // TODO: Что сделать с сохранением пользователя
     @Override
     public BotApiMethod<?> handler(TgUserDto userDto) {
         UserSession session = sessionManager.getOrCreateSession(userDto.getUserId());
+        userDto.setFullName(session.getFullName());
+        userDto.setPhoneNumber(session.getPhoneNumber());
 
-        if (session.getState().equals(UserState.COMPLETED)) {
+        TgUser user = getOrCreateUser(userDto, session);
+        DailyRecord dailyRecord = getOrCreateDailyRecord(session.getSelectedDate());
 
-            userDto.setFullName(session.getFullName());
-            userDto.setPhoneNumber(session.getPhoneNumber());
+        createAndAddTimeSlot(dailyRecord, session, user);
+        dailyRecordService.save(dailyRecord);
 
-            TgUser user = getOrCreateUser(userDto, session);
-            DailyRecord dailyRecord = getOrCreateDailyRecord(session.getSelectedDate());
-
-            createAndAddTimeSlot(dailyRecord, session, user);
-            dailyRecordService.save(dailyRecord);
-
-            sessionManager.removeSession(user.getUserId());
-            return buildSuccessMessage(userDto);
-        }
-        return buildFailedMessage(userDto);
+        sessionManager.removeSession(user.getUserId());
+        return buildSuccessMessage(userDto);
     }
 
     private TgUser getOrCreateUser(TgUserDto dto, UserSession session) {
@@ -82,10 +73,10 @@ public class ConfirmCommand implements Command {
                 user
         );
         record.getTimeSlotList().add(slot);
-        int duration = Integer.parseInt(session.getSelectedService().getDuration().substring(1,2));
+        int duration = Integer.parseInt(session.getSelectedService().getDuration().substring(1, 2));
         if (duration >= 2 && !session.getSelectedTime().equals(LocalTime.of(17, 0))) {
             TimeSlot anotherSlot = getAnotherSlot(record, session, user);
-            record .getTimeSlotList().add(anotherSlot);
+            record.getTimeSlotList().add(anotherSlot);
         }
     }
 
@@ -105,14 +96,7 @@ public class ConfirmCommand implements Command {
         return EditMessageText.builder()
                 .chatId(dto.getChatId())
                 .messageId(dto.getMessageId())
-                .text("Вы успешно записаны!")
-                .build();
-    }
-
-    private SendMessage buildFailedMessage(TgUserDto dto) {
-        return SendMessage.builder()
-                .chatId(dto.getChatId())
-                .text("Вы ввели не все данные для записи!")
+                .text("Вы успешно записались!")
                 .build();
     }
 }

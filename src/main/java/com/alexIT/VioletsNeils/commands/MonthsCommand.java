@@ -1,6 +1,7 @@
 package com.alexIT.VioletsNeils.commands;
 
 import com.alexIT.VioletsNeils.dto.TgUserDto;
+import com.alexIT.VioletsNeils.enums.UserState;
 import com.alexIT.VioletsNeils.keyboards.impl.DaysKeyboardBuilder;
 import com.alexIT.VioletsNeils.keyboards.KeyboardBuilder;
 import com.alexIT.VioletsNeils.keyboards.impl.MonthKeyboardBuilder;
@@ -26,8 +27,8 @@ public class MonthsCommand implements Command {
     private boolean isChooseMonthCommand;
 
     @Override
-    public boolean supports(String text) {
-        if (text != null && text.equals("/chooseMonth")) {
+    public boolean supports(String text, UserState state) {
+        if (text != null && text.equals("/chooseMonth") && state.equals(UserState.PREPARED)) {
             isChooseMonthCommand = true;
             return true;
         }

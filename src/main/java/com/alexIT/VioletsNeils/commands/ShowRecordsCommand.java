@@ -2,6 +2,7 @@ package com.alexIT.VioletsNeils.commands;
 
 import com.alexIT.VioletsNeils.dto.TgUserDto;
 import com.alexIT.VioletsNeils.entity.TimeSlot;
+import com.alexIT.VioletsNeils.enums.UserState;
 import com.alexIT.VioletsNeils.service.TimeSlotService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -26,8 +27,8 @@ public class ShowRecordsCommand implements Command{
             """;
 
     @Override
-    public boolean supports(String text) {
-        return text != null && text.equals("/showRecords");
+    public boolean supports(String text, UserState state) {
+        return text != null && text.equals("/showRecords") && state.equals(UserState.PREPARED);
     }
 
     @Override

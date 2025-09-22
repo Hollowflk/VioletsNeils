@@ -1,6 +1,7 @@
 package com.alexIT.VioletsNeils.commands;
 
 import com.alexIT.VioletsNeils.dto.TgUserDto;
+import com.alexIT.VioletsNeils.enums.UserState;
 import com.alexIT.VioletsNeils.keyboards.impl.DaysKeyboardBuilder;
 import com.alexIT.VioletsNeils.keyboards.KeyboardBuilder;
 import com.alexIT.VioletsNeils.keyboards.impl.TimeKeyboardBuilder;
@@ -34,8 +35,8 @@ public class DayCommand implements Command {
     private boolean isChooseDateCommand;
 
     @Override
-    public boolean supports(String text) {
-        if (text != null && text.equals("/chooseDate")) {
+    public boolean supports(String text, UserState state) {
+        if (text != null && text.equals("/chooseDate") && state.equals(UserState.PREPARED)) {
             isChooseDateCommand = true;
             return true;
         }

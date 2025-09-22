@@ -16,14 +16,14 @@ public class UnknowCommand implements Command {
     private final UserSessionManager sessionManager;
 
     @Override
-    public boolean supports(String text) {
+    public boolean supports(String text, UserState state) {
         return true;
     }
 
     @Override
     public BotApiMethod<?> handler(TgUserDto userDto) {
-        String text = "Неизвестная команда";
         UserSession userSession = sessionManager.getOrCreateSession(userDto.getUserId());
+        String text = "Неизвестная команда";
         if (userSession.getState().equals(UserState.WAIT_PHONE)) {
             text = "Неверный формат. Номер должен начинаться с 8 и содержать 11 цифр.\n" +
                     "Попробуйте снова:";
