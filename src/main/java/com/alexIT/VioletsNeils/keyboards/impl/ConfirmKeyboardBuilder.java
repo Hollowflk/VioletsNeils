@@ -1,5 +1,6 @@
-package com.alexIT.VioletsNeils.keyboards;
+package com.alexIT.VioletsNeils.keyboards.impl;
 
+import com.alexIT.VioletsNeils.keyboards.KeyboardBuilder;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -8,7 +9,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import java.util.List;
 
 @Component
-public class ConfirmKeyboardBuilder implements KeyboardBuilder{
+public class ConfirmKeyboardBuilder implements KeyboardBuilder {
 
     @Override
     public InlineKeyboardMarkup build() {

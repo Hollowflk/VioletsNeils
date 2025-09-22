@@ -32,7 +32,7 @@ public class PhoneNumberCommand implements Command {
         userSession.setState(UserState.WAIT_NAME);
         return SendMessage.builder()
                 .chatId(userDto.getChatId())
-                .text("Введите ФИО")
+                .text("Введите Фамилию Имя")
                 .build();
     }
 }

@@ -3,7 +3,7 @@ package com.alexIT.VioletsNeils.commands;
 import com.alexIT.VioletsNeils.dto.TgUserDto;
 import com.alexIT.VioletsNeils.entity.Service;
 import com.alexIT.VioletsNeils.keyboards.KeyboardBuilder;
-import com.alexIT.VioletsNeils.keyboards.ServiceKeyboardBuilder;
+import com.alexIT.VioletsNeils.keyboards.impl.ServiceKeyboardBuilder;
 import com.alexIT.VioletsNeils.service.ServiceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

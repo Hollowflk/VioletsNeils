@@ -2,8 +2,8 @@ package com.alexIT.VioletsNeils.commands;
 
 import com.alexIT.VioletsNeils.dto.TgUserDto;
 import com.alexIT.VioletsNeils.enums.RoleUser;
-import com.alexIT.VioletsNeils.keyboards.AdminKeyboardBuilder;
-import com.alexIT.VioletsNeils.keyboards.DefaultKeyboardBuilder;
+import com.alexIT.VioletsNeils.keyboards.impl.AdminKeyboardBuilder;
+import com.alexIT.VioletsNeils.keyboards.impl.DefaultKeyboardBuilder;
 import com.alexIT.VioletsNeils.keyboards.KeyboardBuilder;
 import com.alexIT.VioletsNeils.service.UserRoleService;
 import org.springframework.stereotype.Component;

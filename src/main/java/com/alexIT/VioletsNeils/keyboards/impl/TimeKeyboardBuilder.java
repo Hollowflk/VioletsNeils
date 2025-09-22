@@ -1,8 +1,11 @@
-package com.alexIT.VioletsNeils.keyboards;
+package com.alexIT.VioletsNeils.keyboards.impl;
 
 import com.alexIT.VioletsNeils.entity.DailyRecord;
 import com.alexIT.VioletsNeils.entity.TimeSlot;
+import com.alexIT.VioletsNeils.keyboards.KeyboardBuilder;
+import com.alexIT.VioletsNeils.service.TimeSlotService;
 import com.alexIT.VioletsNeils.service.impl.DailyRecordServiceImpl;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -14,22 +17,14 @@ import java.time.LocalTime;
 import java.util.*;
 
 @Component
+@RequiredArgsConstructor
 public class TimeKeyboardBuilder implements KeyboardBuilder {
 
     private final DailyRecordServiceImpl recordService;
+    private final TimeSlotService timeSlotService;
 
     @Setter
     private LocalDate date;
-
-    private static final Map<LocalTime, String> TIME_MAP = new LinkedHashMap<>();
-
-    public TimeKeyboardBuilder(DailyRecordServiceImpl recordService) {
-        this.recordService = recordService;
-        TIME_MAP.put(LocalTime.of(10, 0), "10:00");
-        TIME_MAP.put(LocalTime.of(12, 0), "12:00");
-        TIME_MAP.put(LocalTime.of(15, 0), "15:00");
-        TIME_MAP.put(LocalTime.of(17, 0), "17:00");
-    }
 
     @Override
     public InlineKeyboardMarkup build() {
@@ -44,7 +39,7 @@ public class TimeKeyboardBuilder implements KeyboardBuilder {
             }
         }
 
-        for (Map.Entry<LocalTime, String> entry : TIME_MAP.entrySet()) {
+        for (Map.Entry<LocalTime, String> entry : timeSlotService.timeMap.entrySet()) {
             if (!occupiedTimes.contains(entry.getKey())) {
                 String[] timeValue = entry.getValue().split(":");
                 rows.add(addButton(

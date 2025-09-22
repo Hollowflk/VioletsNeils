@@ -2,7 +2,7 @@ package com.alexIT.VioletsNeils.commands;
 
 import com.alexIT.VioletsNeils.dto.TgUserDto;
 import com.alexIT.VioletsNeils.enums.UserState;
-import com.alexIT.VioletsNeils.keyboards.ConfirmKeyboardBuilder;
+import com.alexIT.VioletsNeils.keyboards.impl.ConfirmKeyboardBuilder;
 import com.alexIT.VioletsNeils.session.UserSession;
 import com.alexIT.VioletsNeils.session.UserSessionManager;
 import com.alexIT.VioletsNeils.utils.MonthsAndDaysUtils;
@@ -32,7 +32,7 @@ public class FullnameCommand implements Command {
 
     @Override
     public boolean supports(String text) {
-        if (text != null && text.matches("^[А-ЯЁ][а-яё]+(?:-[А-ЯЁ][а-яё]+)?\\s[А-ЯЁ][а-яё]+\\s[А-ЯЁ][а-яё]+$")) {
+        if (text != null && text.matches("^[А-ЯЁ][а-яё]+(?:-[А-ЯЁ][а-яё]+)?\\s[А-ЯЁ][а-яё]+$")) {
             fullName = text;
             return true;
         }

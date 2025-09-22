@@ -1,9 +1,9 @@
 package com.alexIT.VioletsNeils.commands;
 
 import com.alexIT.VioletsNeils.dto.TgUserDto;
-import com.alexIT.VioletsNeils.keyboards.DaysKeyboardBuilder;
+import com.alexIT.VioletsNeils.keyboards.impl.DaysKeyboardBuilder;
 import com.alexIT.VioletsNeils.keyboards.KeyboardBuilder;
-import com.alexIT.VioletsNeils.keyboards.MonthKeyboardBuilder;
+import com.alexIT.VioletsNeils.keyboards.impl.MonthKeyboardBuilder;
 import com.alexIT.VioletsNeils.repository.DailyRepository;
 import com.alexIT.VioletsNeils.session.UserSession;
 import com.alexIT.VioletsNeils.session.UserSessionManager;

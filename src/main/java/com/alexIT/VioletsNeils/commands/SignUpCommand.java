@@ -1,7 +1,7 @@
 package com.alexIT.VioletsNeils.commands;
 
 import com.alexIT.VioletsNeils.dto.TgUserDto;
-import com.alexIT.VioletsNeils.keyboards.ServiceCategoryKeyboardBuilder;
+import com.alexIT.VioletsNeils.keyboards.impl.ServiceCategoryKeyboardBuilder;
 import com.alexIT.VioletsNeils.session.UserSessionManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

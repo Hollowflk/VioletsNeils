@@ -1,6 +1,7 @@
-package com.alexIT.VioletsNeils.keyboards;
+package com.alexIT.VioletsNeils.keyboards.impl;
 
 import com.alexIT.VioletsNeils.entity.Service;
+import com.alexIT.VioletsNeils.keyboards.KeyboardBuilder;
 import com.alexIT.VioletsNeils.service.ServiceService;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -9,7 +10,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import java.util.ArrayList;
 import java.util.List;
 
-public class ServiceKeyboardBuilder implements KeyboardBuilder{
+public class ServiceKeyboardBuilder implements KeyboardBuilder {
 
     private final int serviceCategoryId;
     private final ServiceService serviceService;

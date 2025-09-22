@@ -6,17 +6,22 @@ import com.alexIT.VioletsNeils.entity.DailyRecord;
 import com.alexIT.VioletsNeils.entity.TgUser;
 import com.alexIT.VioletsNeils.entity.TimeSlot;
 import com.alexIT.VioletsNeils.enums.UserState;
+import com.alexIT.VioletsNeils.service.TimeSlotService;
 import com.alexIT.VioletsNeils.service.impl.DailyRecordServiceImpl;
 import com.alexIT.VioletsNeils.service.impl.UserServiceImpl;
 import com.alexIT.VioletsNeils.session.UserSession;
 import com.alexIT.VioletsNeils.session.UserSessionManager;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -27,6 +32,7 @@ public class ConfirmCommand implements Command {
     private final DailyRecordServiceImpl dailyRecordService;
     private final ConvectorUser convectorUser;
     private final UserServiceImpl userService;
+    private final TimeSlotService timeSlotService;
 
     @Override
     public boolean supports(String text) {
@@ -76,6 +82,23 @@ public class ConfirmCommand implements Command {
                 user
         );
         record.getTimeSlotList().add(slot);
+        int duration = Integer.parseInt(session.getSelectedService().getDuration().substring(1,2));
+        if (duration >= 2 && !session.getSelectedTime().equals(LocalTime.of(17, 0))) {
+            TimeSlot anotherSlot = getAnotherSlot(record, session, user);
+            record .getTimeSlotList().add(anotherSlot);
+        }
+    }
+
+    private TimeSlot getAnotherSlot(DailyRecord record, UserSession session, TgUser user) {
+        List<LocalTime> timeList = new ArrayList<>(timeSlotService.timeMap.keySet());
+        int index = timeList.indexOf(session.getSelectedTime());
+        LocalTime nextSlot = timeList.get(index + 1);
+        return new TimeSlot(
+                nextSlot,
+                record,
+                session.getSelectedService(),
+                user
+        );
     }
 
     private EditMessageText buildSuccessMessage(TgUserDto dto) {

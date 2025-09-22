@@ -1,7 +1,7 @@
 package com.alexIT.VioletsNeils.commands;
 
 import com.alexIT.VioletsNeils.dto.TgUserDto;
-import com.alexIT.VioletsNeils.keyboards.MonthKeyboardBuilder;
+import com.alexIT.VioletsNeils.keyboards.impl.MonthKeyboardBuilder;
 import com.alexIT.VioletsNeils.service.ServiceService;
 import com.alexIT.VioletsNeils.session.UserSession;
 import com.alexIT.VioletsNeils.session.UserSessionManager;
