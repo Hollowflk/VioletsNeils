@@ -37,8 +37,12 @@ public class NotificationService {
                         .build();
                 try {
                     telegramClient.execute(msg);
+                    Thread.sleep(35);
                 } catch (TelegramApiException e) {
                     log.warn("Не удалось отправить уведомление пользователю {}: {}", timeSlot.getUser().getUserId(), e.getMessage());
+                } catch (InterruptedException e) {
+                    log.warn(e.getMessage());
+                    Thread.currentThread().interrupt();
                 }
             }
             return "Уведомления отправлены!";
