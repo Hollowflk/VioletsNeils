@@ -1,8 +1,10 @@
-package com.alexIT.VioletsNeils.keyboards.impl;
+package com.alexIT.VioletsNeils.keyboards.impl.adminKeyboards;
 
-import com.alexIT.VioletsNeils.entity.Service;
+import com.alexIT.VioletsNeils.entity.DailyRecord;
 import com.alexIT.VioletsNeils.keyboards.KeyboardBuilder;
+import com.alexIT.VioletsNeils.service.impl.DailyRecordServiceImpl;
 import com.alexIT.VioletsNeils.utils.MonthsAndDaysUtils;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -10,29 +12,35 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
 
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Component
-public class MonthKeyboardBuilder implements KeyboardBuilder {
+@RequiredArgsConstructor
+public class AdminDaysKeyboardBuilder implements KeyboardBuilder {
 
     @Setter
-    private Service selectedService;
+    private List<DailyRecord> records;
 
     @Override
     public InlineKeyboardMarkup build() {
-        Map<String, String> monthMap = MonthsAndDaysUtils.getMonthsAsString();
         List<InlineKeyboardRow> rows = new ArrayList<>();
-        LocalDate currentMonth = LocalDate.now();
-        LocalDate nextMonth = currentMonth.plusMonths(1);
-        rows.add(addButton(monthMap.get("currentMonth"), String.format("/currentMonth_%s", currentMonth)));
-        rows.add(addButton(monthMap.get("nextMonth"), String.format("/nextMonth_%s", nextMonth)));
-        InlineKeyboardButton back = InlineKeyboardButton.builder()
-                .text("Назад")
-                .callbackData(String.format("/service_category_%d", selectedService.getCategory().getId()))
-                .build();
-        rows.add(new InlineKeyboardRow(back));
+        InlineKeyboardRow row = new InlineKeyboardRow();
+        for (DailyRecord dailyRecord : records) {
+            row.add(InlineKeyboardButton.builder()
+                    .text(String.valueOf(dailyRecord.getDate()))
+                    .callbackData(String.format("/sendNotification_%s", dailyRecord.getDate()))
+                    .build());
+            if (row.size() == 3) {
+                rows.add(row);
+                row = new InlineKeyboardRow();
+            }
+        }
+        if (!row.isEmpty()) {
+            rows.add(row);
+        }
+        rows.add(addButton("Назад", "/chooseAdminMonth"));
         return new InlineKeyboardMarkup(rows);
     }
 

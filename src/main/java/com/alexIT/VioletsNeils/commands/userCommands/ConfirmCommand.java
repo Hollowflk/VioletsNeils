@@ -1,5 +1,6 @@
-package com.alexIT.VioletsNeils.commands;
+package com.alexIT.VioletsNeils.commands.userCommands;
 
+import com.alexIT.VioletsNeils.commands.Command;
 import com.alexIT.VioletsNeils.convector.ConvectorUser;
 import com.alexIT.VioletsNeils.dto.TgUserDto;
 import com.alexIT.VioletsNeils.entity.DailyRecord;

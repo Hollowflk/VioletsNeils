@@ -1,8 +1,9 @@
-package com.alexIT.VioletsNeils.commands;
+package com.alexIT.VioletsNeils.commands.userCommands;
 
+import com.alexIT.VioletsNeils.commands.Command;
 import com.alexIT.VioletsNeils.dto.TgUserDto;
 import com.alexIT.VioletsNeils.enums.UserState;
-import com.alexIT.VioletsNeils.keyboards.impl.ServiceCategoryKeyboardBuilder;
+import com.alexIT.VioletsNeils.keyboards.impl.userKeyboards.ServiceCategoryKeyboardBuilder;
 import com.alexIT.VioletsNeils.session.UserSessionManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -12,7 +13,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 
 @Slf4j
 @Component
-public class SignUpCommand implements Command{
+public class SignUpCommand implements Command {
 
 
     private final ServiceCategoryKeyboardBuilder serviceCategoryKeyboardBuilder;

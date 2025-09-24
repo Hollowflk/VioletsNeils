@@ -1,5 +1,6 @@
-package com.alexIT.VioletsNeils.commands;
+package com.alexIT.VioletsNeils.commands.userCommands;
 
+import com.alexIT.VioletsNeils.commands.Command;
 import com.alexIT.VioletsNeils.dto.TgUserDto;
 import com.alexIT.VioletsNeils.entity.TimeSlot;
 import com.alexIT.VioletsNeils.enums.UserState;
@@ -16,7 +17,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class ShowRecordsCommand implements Command{
+public class ShowRecordsCommand implements Command {
 
     private final TimeSlotService timeSlotService;
     private static final String TIMESLOT_INFO = """

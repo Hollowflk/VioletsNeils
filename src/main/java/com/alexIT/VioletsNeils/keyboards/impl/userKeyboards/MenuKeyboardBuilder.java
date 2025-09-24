@@ -1,4 +1,4 @@
-package com.alexIT.VioletsNeils.keyboards.impl;
+package com.alexIT.VioletsNeils.keyboards.impl.userKeyboards;
 
 import com.alexIT.VioletsNeils.keyboards.KeyboardBuilder;
 import org.springframework.stereotype.Component;
@@ -6,28 +6,17 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class ConfirmKeyboardBuilder implements KeyboardBuilder {
+public class MenuKeyboardBuilder implements KeyboardBuilder {
 
     @Override
     public InlineKeyboardMarkup build() {
-        InlineKeyboardButton yesButton = InlineKeyboardButton.builder()
-                .text("Да")
-                .callbackData("/confirm")
-                .build();
-
-        InlineKeyboardButton noButton = InlineKeyboardButton.builder()
-                .text("Нет")
-                .callbackData("/signUp")
-                .build();
-
-        InlineKeyboardRow row = new InlineKeyboardRow();
-        row.add(yesButton);
-        row.add(noButton);
-
-        return InlineKeyboardMarkup.builder().keyboard(List.of(row)).build();
+        List<InlineKeyboardRow> rows = new ArrayList<>();
+        rows.add(addButton("Меню", "/menu"));
+        return new InlineKeyboardMarkup(rows);
     }
 
     @Override

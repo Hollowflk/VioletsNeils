@@ -1,5 +1,6 @@
-package com.alexIT.VioletsNeils.commands;
+package com.alexIT.VioletsNeils.commands.userCommands;
 
+import com.alexIT.VioletsNeils.commands.Command;
 import com.alexIT.VioletsNeils.dto.TgUserDto;
 import com.alexIT.VioletsNeils.enums.UserState;
 import org.springframework.stereotype.Component;
@@ -7,7 +8,7 @@ import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 @Component
-public class DateBusyCommand implements Command{
+public class DateBusyCommand implements Command {
 
     private String busyDate;
 

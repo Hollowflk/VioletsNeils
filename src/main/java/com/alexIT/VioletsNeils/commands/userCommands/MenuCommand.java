@@ -1,10 +1,11 @@
-package com.alexIT.VioletsNeils.commands;
+package com.alexIT.VioletsNeils.commands.userCommands;
 
+import com.alexIT.VioletsNeils.commands.Command;
 import com.alexIT.VioletsNeils.dto.TgUserDto;
 import com.alexIT.VioletsNeils.enums.RoleUser;
 import com.alexIT.VioletsNeils.enums.UserState;
-import com.alexIT.VioletsNeils.keyboards.impl.AdminKeyboardBuilder;
-import com.alexIT.VioletsNeils.keyboards.impl.DefaultKeyboardBuilder;
+import com.alexIT.VioletsNeils.keyboards.impl.adminKeyboards.AdminKeyboardBuilder;
+import com.alexIT.VioletsNeils.keyboards.impl.userKeyboards.DefaultKeyboardBuilder;
 import com.alexIT.VioletsNeils.keyboards.KeyboardBuilder;
 import com.alexIT.VioletsNeils.service.UserRoleService;
 import com.alexIT.VioletsNeils.session.UserSessionManager;
@@ -16,7 +17,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 
 @Component
 @RequiredArgsConstructor
-public class MenuCommand implements Command{
+public class MenuCommand implements Command {
 
     private final UserRoleService userRoleService;
     private final UserSessionManager sessionManager;

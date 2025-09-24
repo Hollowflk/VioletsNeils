@@ -1,8 +1,9 @@
-package com.alexIT.VioletsNeils.commands;
+package com.alexIT.VioletsNeils.commands.userCommands;
 
+import com.alexIT.VioletsNeils.commands.Command;
 import com.alexIT.VioletsNeils.dto.TgUserDto;
 import com.alexIT.VioletsNeils.enums.UserState;
-import com.alexIT.VioletsNeils.keyboards.impl.ConfirmKeyboardBuilder;
+import com.alexIT.VioletsNeils.keyboards.impl.userKeyboards.ConfirmKeyboardBuilder;
 import com.alexIT.VioletsNeils.session.UserSession;
 import com.alexIT.VioletsNeils.session.UserSessionManager;
 import lombok.RequiredArgsConstructor;

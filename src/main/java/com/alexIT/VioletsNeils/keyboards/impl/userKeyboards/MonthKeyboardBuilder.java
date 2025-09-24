@@ -1,35 +1,36 @@
-package com.alexIT.VioletsNeils.keyboards.impl;
+package com.alexIT.VioletsNeils.keyboards.impl.userKeyboards;
 
 import com.alexIT.VioletsNeils.entity.Service;
 import com.alexIT.VioletsNeils.keyboards.KeyboardBuilder;
-import com.alexIT.VioletsNeils.service.ServiceService;
+import com.alexIT.VioletsNeils.utils.MonthsAndDaysUtils;
+import lombok.Setter;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-public class ServiceKeyboardBuilder implements KeyboardBuilder {
+@Component
+public class MonthKeyboardBuilder implements KeyboardBuilder {
 
-    private final int serviceCategoryId;
-    private final ServiceService serviceService;
-
-    public ServiceKeyboardBuilder(int serviceCategoryId, ServiceService serviceService) {
-        this.serviceCategoryId = serviceCategoryId;
-        this.serviceService = serviceService;
-    }
+    @Setter
+    private Service selectedService;
 
     @Override
     public InlineKeyboardMarkup build() {
+        Map<String, String> monthMap = MonthsAndDaysUtils.getMonthsAsString();
         List<InlineKeyboardRow> rows = new ArrayList<>();
-        List<Service> serviceList = serviceService.findAllByCategoryId(serviceCategoryId);
-        for (Service service : serviceList) {
-            rows.add(addButton(service.getName(), String.format("/service_id%d", service.getId())));
-        }
+        LocalDate currentMonth = LocalDate.now();
+        LocalDate nextMonth = currentMonth.plusMonths(1);
+        rows.add(addButton(monthMap.get("currentMonth"), String.format("/currentMonth_%s", currentMonth)));
+        rows.add(addButton(monthMap.get("nextMonth"), String.format("/nextMonth_%s", nextMonth)));
         InlineKeyboardButton back = InlineKeyboardButton.builder()
                 .text("Назад")
-                .callbackData("/signUp")
+                .callbackData(String.format("/service_category_%d", selectedService.getCategory().getId()))
                 .build();
         rows.add(new InlineKeyboardRow(back));
         return new InlineKeyboardMarkup(rows);

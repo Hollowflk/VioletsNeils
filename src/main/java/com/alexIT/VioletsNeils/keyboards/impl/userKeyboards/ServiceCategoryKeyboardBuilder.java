@@ -1,4 +1,4 @@
-package com.alexIT.VioletsNeils.keyboards.impl;
+package com.alexIT.VioletsNeils.keyboards.impl.userKeyboards;
 
 import com.alexIT.VioletsNeils.entity.ServiceCategory;
 import com.alexIT.VioletsNeils.keyboards.KeyboardBuilder;

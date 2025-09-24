@@ -1,10 +1,11 @@
-package com.alexIT.VioletsNeils.commands;
+package com.alexIT.VioletsNeils.commands.userCommands;
 
+import com.alexIT.VioletsNeils.commands.Command;
 import com.alexIT.VioletsNeils.dto.TgUserDto;
 import com.alexIT.VioletsNeils.enums.UserState;
-import com.alexIT.VioletsNeils.keyboards.impl.DaysKeyboardBuilder;
+import com.alexIT.VioletsNeils.keyboards.impl.userKeyboards.DaysKeyboardBuilder;
 import com.alexIT.VioletsNeils.keyboards.KeyboardBuilder;
-import com.alexIT.VioletsNeils.keyboards.impl.MonthKeyboardBuilder;
+import com.alexIT.VioletsNeils.keyboards.impl.userKeyboards.MonthKeyboardBuilder;
 import com.alexIT.VioletsNeils.repository.DailyRepository;
 import com.alexIT.VioletsNeils.session.UserSession;
 import com.alexIT.VioletsNeils.session.UserSessionManager;
@@ -32,7 +33,7 @@ public class MonthsCommand implements Command {
             isChooseMonthCommand = true;
             return true;
         }
-        if (text != null && (text.startsWith("/currentMonth") || text.startsWith("/nextMonth"))) {
+        if (text != null && (text.startsWith("/currentMonth") || text.startsWith("/nextMonth")) && state.equals(UserState.PREPARED)) {
             String[] textArr = text.split("_");
             String[] currentDateArray = textArr[1].split("-");
             year = Integer.parseInt(currentDateArray[0]);

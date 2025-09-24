@@ -1,10 +1,11 @@
-package com.alexIT.VioletsNeils.commands;
+package com.alexIT.VioletsNeils.commands.userCommands;
 
+import com.alexIT.VioletsNeils.commands.Command;
 import com.alexIT.VioletsNeils.dto.TgUserDto;
 import com.alexIT.VioletsNeils.enums.UserState;
-import com.alexIT.VioletsNeils.keyboards.impl.DaysKeyboardBuilder;
+import com.alexIT.VioletsNeils.keyboards.impl.userKeyboards.DaysKeyboardBuilder;
 import com.alexIT.VioletsNeils.keyboards.KeyboardBuilder;
-import com.alexIT.VioletsNeils.keyboards.impl.TimeKeyboardBuilder;
+import com.alexIT.VioletsNeils.keyboards.impl.userKeyboards.TimeKeyboardBuilder;
 import com.alexIT.VioletsNeils.repository.DailyRepository;
 import com.alexIT.VioletsNeils.session.UserSession;
 import com.alexIT.VioletsNeils.session.UserSessionManager;

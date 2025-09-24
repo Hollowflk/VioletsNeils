@@ -1,6 +1,7 @@
 package com.alexIT.VioletsNeils.bot;
 
 import com.alexIT.VioletsNeils.CommandDispatcher;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.longpolling.util.LongPollingSingleThreadUpdateConsumer;
@@ -14,6 +15,7 @@ import org.telegram.telegrambots.meta.generics.TelegramClient;
 @Component
 public class NeilBot implements LongPollingSingleThreadUpdateConsumer {
 
+    @Getter
     private final TelegramClient client;
     private final CommandDispatcher commandDispatcher;
 

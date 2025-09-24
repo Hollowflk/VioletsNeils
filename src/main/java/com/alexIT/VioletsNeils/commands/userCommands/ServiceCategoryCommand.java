@@ -1,10 +1,11 @@
-package com.alexIT.VioletsNeils.commands;
+package com.alexIT.VioletsNeils.commands.userCommands;
 
+import com.alexIT.VioletsNeils.commands.Command;
 import com.alexIT.VioletsNeils.dto.TgUserDto;
 import com.alexIT.VioletsNeils.entity.Service;
 import com.alexIT.VioletsNeils.enums.UserState;
 import com.alexIT.VioletsNeils.keyboards.KeyboardBuilder;
-import com.alexIT.VioletsNeils.keyboards.impl.ServiceKeyboardBuilder;
+import com.alexIT.VioletsNeils.keyboards.impl.userKeyboards.ServiceKeyboardBuilder;
 import com.alexIT.VioletsNeils.service.ServiceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -16,7 +17,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class ServiceCategoryCommand implements Command{
+public class ServiceCategoryCommand implements Command {
 
     private int serviceCategoryId;
     private final ServiceService serviceService;

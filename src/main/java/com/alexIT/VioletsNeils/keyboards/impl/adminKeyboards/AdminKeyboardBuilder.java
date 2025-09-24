@@ -1,4 +1,4 @@
-package com.alexIT.VioletsNeils.keyboards.impl;
+package com.alexIT.VioletsNeils.keyboards.impl.adminKeyboards;
 
 import com.alexIT.VioletsNeils.keyboards.KeyboardBuilder;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -8,12 +8,14 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import java.util.ArrayList;
 import java.util.List;
 
-public class DefaultKeyboardBuilder implements KeyboardBuilder {
+public class AdminKeyboardBuilder implements KeyboardBuilder {
+
     @Override
     public InlineKeyboardMarkup build() {
         List<InlineKeyboardRow> rows = new ArrayList<>();
         rows.add(addButton("Записаться", "/signUp"));
         rows.add(addButton("Посмотреть записи", "/showRecords"));
+        rows.add(addButton("Отправить напоминание", "/getDateForNotifications"));
         return new InlineKeyboardMarkup(rows);
     }
 

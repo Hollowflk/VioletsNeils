@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import java.util.List;
 @Data
 @Entity(name = "daily_record")
 @NoArgsConstructor
-public class DailyRecord {
+public class DailyRecord implements Comparable<DailyRecord>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,5 +28,10 @@ public class DailyRecord {
 
     public DailyRecord(LocalDate date) {
         this.date = date;
+    }
+
+    @Override
+    public int compareTo(@NotNull DailyRecord o) {
+        return date.compareTo(o.getDate());
     }
 }

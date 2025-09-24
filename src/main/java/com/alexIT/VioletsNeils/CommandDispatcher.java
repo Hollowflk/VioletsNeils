@@ -1,8 +1,9 @@
 package com.alexIT.VioletsNeils;
 
 import com.alexIT.VioletsNeils.commands.Command;
-import com.alexIT.VioletsNeils.commands.UnknowCommand;
+import com.alexIT.VioletsNeils.commands.userCommands.UnknowCommand;
 import com.alexIT.VioletsNeils.dto.TgUserDto;
+import com.alexIT.VioletsNeils.entity.TgUser;
 import com.alexIT.VioletsNeils.enums.UserState;
 import com.alexIT.VioletsNeils.service.impl.UserServiceImpl;
 import com.alexIT.VioletsNeils.session.UserSession;
@@ -14,6 +15,7 @@ import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Component
@@ -28,8 +30,11 @@ public class CommandDispatcher {
     public BotApiMethod<?> handler(Update update) {
         TgUserDto userDto = userService.createUserDto(update);
         UserSession userSession = sessionManager.getOrCreateSession(userDto.getUserId());
-        if (userService.findById(userSession.getUserId()).isPresent()) {
+        Optional<TgUser> optionalTgUser = userService.findById(userSession.getUserId());
+        if (optionalTgUser.isPresent() && sessionManager.isUserPrepared(userDto.getUserId())) {
             userSession.setState(UserState.PREPARED);
+            userSession.setPhoneNumber(optionalTgUser.get().getPhoneNumber());
+            userSession.setFullName(optionalTgUser.get().getFullName());
         }
         String textCommand = getText(update);
         log.info("Получена команда {}", textCommand);

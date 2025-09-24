@@ -1,8 +1,9 @@
-package com.alexIT.VioletsNeils.commands;
+package com.alexIT.VioletsNeils.commands.userCommands;
 
+import com.alexIT.VioletsNeils.commands.Command;
 import com.alexIT.VioletsNeils.dto.TgUserDto;
 import com.alexIT.VioletsNeils.enums.UserState;
-import com.alexIT.VioletsNeils.keyboards.impl.MonthKeyboardBuilder;
+import com.alexIT.VioletsNeils.keyboards.impl.userKeyboards.MonthKeyboardBuilder;
 import com.alexIT.VioletsNeils.service.ServiceService;
 import com.alexIT.VioletsNeils.session.UserSession;
 import com.alexIT.VioletsNeils.session.UserSessionManager;
@@ -14,7 +15,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 
 @Component
 @RequiredArgsConstructor
-public class ServiceCommand implements Command{
+public class ServiceCommand implements Command {
 
     private Long serviceId;
     private final ServiceService serviceService;
