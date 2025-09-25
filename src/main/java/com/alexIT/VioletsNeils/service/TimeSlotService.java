@@ -16,14 +16,14 @@ import java.util.Optional;
 public class TimeSlotService {
 
     private final TimeSlotRepository repository;
-    public final Map<LocalTime, String> timeMap = new LinkedHashMap<>();
+    public static final Map<LocalTime, String> TIME_MAP = new LinkedHashMap<>();
 
     public TimeSlotService(TimeSlotRepository repository) {
         this.repository = repository;
-        timeMap.put(LocalTime.of(10, 0), "10:00");
-        timeMap.put(LocalTime.of(12, 0), "12:00");
-        timeMap.put(LocalTime.of(15, 0), "15:00");
-        timeMap.put(LocalTime.of(17, 0), "17:00");
+        TIME_MAP.put(LocalTime.of(10, 0), "10:00");
+        TIME_MAP.put(LocalTime.of(12, 0), "12:00");
+        TIME_MAP.put(LocalTime.of(15, 0), "15:00");
+        TIME_MAP.put(LocalTime.of(17, 0), "17:00");
     }
 
     public List<TimeSlot> findAll() {

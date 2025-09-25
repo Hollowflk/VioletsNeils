@@ -39,7 +39,7 @@ public class TimeKeyboardBuilder implements KeyboardBuilder {
             }
         }
 
-        for (Map.Entry<LocalTime, String> entry : timeSlotService.timeMap.entrySet()) {
+        for (Map.Entry<LocalTime, String> entry : timeSlotService.TIME_MAP.entrySet()) {
             if (!occupiedTimes.contains(entry.getKey())) {
                 String[] timeValue = entry.getValue().split(":");
                 rows.add(addButton(

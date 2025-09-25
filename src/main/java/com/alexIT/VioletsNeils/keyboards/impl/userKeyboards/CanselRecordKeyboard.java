@@ -1,4 +1,4 @@
-package com.alexIT.VioletsNeils.commands.userCommands.canselCommand;
+package com.alexIT.VioletsNeils.keyboards.impl.userKeyboards;
 
 import com.alexIT.VioletsNeils.entity.TimeSlot;
 import com.alexIT.VioletsNeils.keyboards.KeyboardBuilder;

@@ -1,4 +1,4 @@
-package com.alexIT.VioletsNeils.commands.userCommands;
+package com.alexIT.VioletsNeils.commands.userCommands.MenuCommand;
 
 import com.alexIT.VioletsNeils.commands.Command;
 import com.alexIT.VioletsNeils.dto.TgUserDto;
