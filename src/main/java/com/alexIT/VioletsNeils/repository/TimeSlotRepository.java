@@ -10,5 +10,4 @@ import java.util.List;
 public interface TimeSlotRepository extends JpaRepository<TimeSlot, Long> {
 
     List<TimeSlot> findAllByUser_UserId(Long userId);
-
 }

@@ -1,6 +1,9 @@
-package com.alexIT.VioletsNeils.keyboards.impl.adminKeyboards;
+package com.alexIT.VioletsNeils.commands.userCommands.canselCommand;
 
+import com.alexIT.VioletsNeils.entity.TimeSlot;
 import com.alexIT.VioletsNeils.keyboards.KeyboardBuilder;
+import lombok.Setter;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
@@ -8,15 +11,22 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdminKeyboardBuilder implements KeyboardBuilder {
+@Component
+public class CanselRecordKeyboard implements KeyboardBuilder {
+
+    @Setter
+    private List<TimeSlot> timeSlotList;
 
     @Override
     public InlineKeyboardMarkup build() {
         List<InlineKeyboardRow> rows = new ArrayList<>();
-        rows.add(addButton("Записаться", "/signUp"));
-        rows.add(addButton("Посмотреть записи", "/showRecords"));
-        rows.add(addButton("Отменить запись", "/canselRecords"));
-        rows.add(addButton("Отправить напоминание", "/getDateForNotifications"));
+        for (TimeSlot timeSlot : timeSlotList) {
+            rows.add(
+                    addButton(
+                            String.valueOf(timeSlot.getDailyRecord().getDate()),
+                            String.format("/canselRecord_%d", timeSlot.getId())));
+        }
+        rows.add(addButton("Назад", "/menu"));
         return new InlineKeyboardMarkup(rows);
     }
 
