@@ -12,10 +12,14 @@ import com.alexIT.VioletsNeils.service.impl.DailyRecordServiceImpl;
 import com.alexIT.VioletsNeils.service.impl.UserServiceImpl;
 import com.alexIT.VioletsNeils.session.UserSession;
 import com.alexIT.VioletsNeils.session.UserSessionManager;
+import com.alexIT.VioletsNeils.utils.MonthsAndDaysUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -25,6 +29,17 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class ConfirmCommand implements Command {
+
+    private static final String SUCCESS_MSG = """
+            %s, Вы записались на процедуру %s
+            на %s %s в %s
+            Мастер Виолетта Вертий
+            
+            Местоположение: Гостиница «Тихая сосна», 2 этаж, кабинет 206
+            Телефон для связи: +7 (951) 769-53-94
+            
+            До встречи🌸
+            """;
 
     private final UserSessionManager sessionManager;
     private final DailyRecordServiceImpl dailyRecordService;
@@ -39,18 +54,18 @@ public class ConfirmCommand implements Command {
 
     @Override
     public BotApiMethod<?> handler(TgUserDto userDto) {
-        UserSession session = sessionManager.getOrCreateSession(userDto.getUserId());
-        userDto.setFullName(session.getFullName());
-        userDto.setPhoneNumber(session.getPhoneNumber());
+        UserSession userSession = sessionManager.getOrCreateSession(userDto.getUserId());
+        userDto.setFullName(userSession.getFullName());
+        userDto.setPhoneNumber(userSession.getPhoneNumber());
 
-        TgUser user = getOrCreateUser(userDto, session);
-        DailyRecord dailyRecord = getOrCreateDailyRecord(session.getSelectedDate());
+        TgUser user = getOrCreateUser(userDto, userSession);
+        DailyRecord dailyRecord = getOrCreateDailyRecord(userSession.getSelectedDate());
 
-        createAndAddTimeSlot(dailyRecord, session, user);
+        createAndAddTimeSlot(dailyRecord, userSession, user);
         dailyRecordService.save(dailyRecord);
 
         sessionManager.removeSession(user.getUserId());
-        return buildSuccessMessage(userDto);
+        return buildSuccessMessage(userDto, userSession);
     }
 
     private TgUser getOrCreateUser(TgUserDto dto, UserSession session) {
@@ -93,11 +108,30 @@ public class ConfirmCommand implements Command {
         );
     }
 
-    private EditMessageText buildSuccessMessage(TgUserDto dto) {
+    private EditMessageText buildSuccessMessage(TgUserDto dto, UserSession userSession) {
         return EditMessageText.builder()
                 .chatId(dto.getChatId())
                 .messageId(dto.getMessageId())
-                .text("Вы успешно записались!")
+                .text(createMsg(userSession))
+                .replyMarkup(InlineKeyboardMarkup.builder()
+                        .keyboard(List.of(
+                                new InlineKeyboardRow(
+                                        InlineKeyboardButton.builder()
+                                                .text("Меню")
+                                                .callbackData("/menu")
+                                                .build())
+                        ))
+                        .build())
                 .build();
+    }
+
+    private String createMsg(UserSession userSession) {
+        String monthName = MonthsAndDaysUtils.getNameMonth(userSession.getSelectedDate().getMonth().getValue());
+        return String.format(SUCCESS_MSG,
+                userSession.getFullName(),
+                userSession.getSelectedService().getName(),
+                userSession.getSelectedDate().getDayOfMonth(),
+                MonthsAndDaysUtils.monthGenitiveForms.get(monthName),
+                userSession.getSelectedTime());
     }
 }
