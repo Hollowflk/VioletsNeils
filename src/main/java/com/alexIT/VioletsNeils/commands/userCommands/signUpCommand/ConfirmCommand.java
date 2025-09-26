@@ -14,6 +14,7 @@ import com.alexIT.VioletsNeils.session.UserSession;
 import com.alexIT.VioletsNeils.session.UserSessionManager;
 import com.alexIT.VioletsNeils.utils.MonthsAndDaysUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
@@ -21,6 +22,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -28,6 +30,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class ConfirmCommand implements Command {
 
     private static final String SUCCESS_MSG = """
@@ -89,8 +92,8 @@ public class ConfirmCommand implements Command {
                 user
         );
         record.getTimeSlotList().add(slot);
-        int duration = Integer.parseInt(session.getSelectedService().getDuration().substring(1, 2));
-        if (duration >= 2 && !session.getSelectedTime().equals(LocalTime.of(17, 0))) {
+        long duration = getDuration(session.getSelectedService().getDuration()).getSeconds();
+        if (duration > 7200 && !session.getSelectedTime().equals(LocalTime.of(17, 0))) {
             TimeSlot anotherSlot = getAnotherSlot(record, session, user);
             record.getTimeSlotList().add(anotherSlot);
         }
@@ -133,5 +136,12 @@ public class ConfirmCommand implements Command {
                 userSession.getSelectedDate().getDayOfMonth(),
                 MonthsAndDaysUtils.monthGenitiveForms.get(monthName),
                 userSession.getSelectedTime());
+    }
+
+    private Duration getDuration(String durationString) {
+        String hour = durationString.substring(1, 2);
+        String minutes = durationString.substring(3, 5);
+        String durationFormat = String.format("PT%sH%sM", hour, minutes);
+        return Duration.parse(durationFormat);
     }
 }
