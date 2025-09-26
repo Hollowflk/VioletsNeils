@@ -1,4 +1,4 @@
-package com.alexIT.VioletsNeils.commands.signUpCommand;
+package com.alexIT.VioletsNeils.commands.userCommands.signUpCommand;
 
 import com.alexIT.VioletsNeils.commands.Command;
 import com.alexIT.VioletsNeils.dto.TgUserDto;

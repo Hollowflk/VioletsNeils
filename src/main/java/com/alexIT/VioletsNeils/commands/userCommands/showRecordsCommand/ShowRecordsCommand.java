@@ -1,4 +1,4 @@
-package com.alexIT.VioletsNeils.commands.showRecordsCommand;
+package com.alexIT.VioletsNeils.commands.userCommands.showRecordsCommand;
 
 import com.alexIT.VioletsNeils.commands.Command;
 import com.alexIT.VioletsNeils.dto.TgUserDto;
