@@ -3,6 +3,7 @@ package com.alexIT.VioletsNeils.commands.userCommands.canselCommand;
 import com.alexIT.VioletsNeils.commands.Command;
 import com.alexIT.VioletsNeils.dto.TgUserDto;
 import com.alexIT.VioletsNeils.entity.TimeSlot;
+import com.alexIT.VioletsNeils.enums.RoleUser;
 import com.alexIT.VioletsNeils.enums.UserState;
 import com.alexIT.VioletsNeils.keyboards.impl.userKeyboards.CanselRecordKeyboard;
 import com.alexIT.VioletsNeils.service.TimeSlotService;
@@ -29,11 +30,11 @@ public class CanselRecordsCommand implements Command {
     private boolean isCanselCommand;
 
     @Override
-    public boolean supports(String text, UserState state) {
-        if (text != null && text.equals("/canselRecords") && (state.equals(UserState.PREPARED) || state.equals(UserState.COMPLETED))) {
+    public boolean supports(String text, UserState state, RoleUser roleUser) {
+        if (text != null && text.equals("/canselRecords") && (state.equals(UserState.PREPARED) || state.equals(UserState.COMPLETED)) && roleUser.equals(RoleUser.USER)) {
             return true;
         }
-        if (text != null && text.startsWith("/canselRecord_") && (state.equals(UserState.PREPARED) || state.equals(UserState.COMPLETED))) {
+        if (text != null && text.startsWith("/canselRecord_") && (state.equals(UserState.PREPARED) || state.equals(UserState.COMPLETED)) && roleUser.equals(RoleUser.USER)) {
             timeSlotId = Long.parseLong(text.substring(14));
             isCanselCommand = true;
             return true;

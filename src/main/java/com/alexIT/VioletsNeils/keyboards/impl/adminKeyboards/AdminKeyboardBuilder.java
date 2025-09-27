@@ -13,9 +13,6 @@ public class AdminKeyboardBuilder implements KeyboardBuilder {
     @Override
     public InlineKeyboardMarkup build() {
         List<InlineKeyboardRow> rows = new ArrayList<>();
-        rows.add(addButton("Записаться", "/signUp"));
-        rows.add(addButton("Посмотреть записи", "/showRecords"));
-        rows.add(addButton("Отменить запись", "/canselRecords"));
         rows.add(addButton("Отправить напоминание", "/getDateForNotifications"));
         return new InlineKeyboardMarkup(rows);
     }

@@ -3,6 +3,7 @@ package com.alexIT.VioletsNeils.commands.userCommands.showRecordsCommand;
 import com.alexIT.VioletsNeils.commands.Command;
 import com.alexIT.VioletsNeils.dto.TgUserDto;
 import com.alexIT.VioletsNeils.entity.TimeSlot;
+import com.alexIT.VioletsNeils.enums.RoleUser;
 import com.alexIT.VioletsNeils.enums.UserState;
 import com.alexIT.VioletsNeils.service.TimeSlotService;
 import com.alexIT.VioletsNeils.utils.MonthsAndDaysUtils;
@@ -34,8 +35,8 @@ public class ShowRecordsCommand implements Command {
             """;
 
     @Override
-    public boolean supports(String text, UserState state) {
-        return text != null && text.equals("/showRecords") && state.equals(UserState.PREPARED);
+    public boolean supports(String text, UserState state, RoleUser roleUser) {
+        return text != null && text.equals("/showRecords") && state.equals(UserState.PREPARED) && roleUser.equals(RoleUser.USER);
     }
 
     @Override

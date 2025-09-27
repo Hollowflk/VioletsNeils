@@ -1,6 +1,7 @@
 package com.alexIT.VioletsNeils.session;
 
 import com.alexIT.VioletsNeils.entity.Service;
+import com.alexIT.VioletsNeils.enums.RoleUser;
 import com.alexIT.VioletsNeils.enums.UserState;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,9 +20,11 @@ public class UserSession {
     private LocalTime selectedTime;
     private String phoneNumber;
     private String fullName;
+    private RoleUser roleUser;
 
     public UserSession(Long userId) {
         state = UserState.NEW_USER;
         this.userId = userId;
+        roleUser = RoleUser.USER;
     }
 }

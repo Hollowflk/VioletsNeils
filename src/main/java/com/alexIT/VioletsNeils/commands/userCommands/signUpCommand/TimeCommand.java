@@ -2,6 +2,7 @@ package com.alexIT.VioletsNeils.commands.userCommands.signUpCommand;
 
 import com.alexIT.VioletsNeils.commands.Command;
 import com.alexIT.VioletsNeils.dto.TgUserDto;
+import com.alexIT.VioletsNeils.enums.RoleUser;
 import com.alexIT.VioletsNeils.enums.UserState;
 import com.alexIT.VioletsNeils.keyboards.impl.userKeyboards.ConfirmKeyboardBuilder;
 import com.alexIT.VioletsNeils.session.UserSession;
@@ -34,8 +35,8 @@ public class TimeCommand implements Command {
             """;
 
     @Override
-    public boolean supports(String text, UserState state) {
-        if (text != null && text.startsWith("/record") && state.equals(UserState.PREPARED)) {
+    public boolean supports(String text, UserState state, RoleUser roleUser) {
+        if (text != null && text.startsWith("/record") && state.equals(UserState.PREPARED) && roleUser.equals(RoleUser.USER)) {
             String[] splitText = text.split("_");
             timeRecord = LocalTime.of(Integer.parseInt(splitText[1]), 0, 0);
             return true;

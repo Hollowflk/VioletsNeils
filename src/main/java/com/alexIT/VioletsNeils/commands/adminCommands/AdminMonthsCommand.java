@@ -3,6 +3,7 @@ package com.alexIT.VioletsNeils.commands.adminCommands;
 import com.alexIT.VioletsNeils.commands.Command;
 import com.alexIT.VioletsNeils.dto.TgUserDto;
 import com.alexIT.VioletsNeils.entity.DailyRecord;
+import com.alexIT.VioletsNeils.enums.RoleUser;
 import com.alexIT.VioletsNeils.enums.UserState;
 import com.alexIT.VioletsNeils.keyboards.impl.adminKeyboards.AdminDaysKeyboardBuilder;
 import com.alexIT.VioletsNeils.keyboards.impl.adminKeyboards.AdminMonthKeyboardBuilder;
@@ -32,12 +33,12 @@ public class AdminMonthsCommand implements Command {
     private final DailyRecordServiceImpl dailyRecordService;
 
     @Override
-    public boolean supports(String text, UserState state) {
-        if (text != null && text.equals("/chooseAdminMonth") && state.equals(UserState.PREPARED)) {
+    public boolean supports(String text, UserState state, RoleUser roleUser) {
+        if (text != null && text.equals("/chooseAdminMonth") && state.equals(UserState.PREPARED) && roleUser.equals(RoleUser.ADMIN)) {
             isChooseAdminMonthCommand = true;
             return true;
         }
-        if (text != null && (text.startsWith("/admin_currentMonth") || text.startsWith("/admin_nextMonth")) && state.equals(UserState.PREPARED)) {
+        if (text != null && (text.startsWith("/admin_currentMonth") || text.startsWith("/admin_nextMonth")) && state.equals(UserState.PREPARED) && roleUser.equals(RoleUser.ADMIN)) {
             String[] textArray = text.split("_");
             String[] currentDateArray = textArray[2].split("-");
             year = Integer.parseInt(currentDateArray[0]);
