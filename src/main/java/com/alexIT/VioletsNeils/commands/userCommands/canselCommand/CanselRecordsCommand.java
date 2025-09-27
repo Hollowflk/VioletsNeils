@@ -10,6 +10,7 @@ import com.alexIT.VioletsNeils.service.TimeSlotService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
@@ -78,11 +79,19 @@ public class CanselRecordsCommand implements Command {
         }
         StringBuilder builder = new StringBuilder();
         builder.append("Ваши записи.").append("\n\n");
-        for (TimeSlot timeSlot : timeSlotList) {
+        for (int i = 0; i < timeSlotList.size(); i++) {
+            TimeSlot currentRecord = timeSlotList.get(i);
+            if (i > 0) {
+                TimeSlot previousRecord = timeSlotList.get(i - 1);
+                if (currentRecord.getService().getId().equals(previousRecord.getService().getId())
+                        && currentRecord.getDailyRecord().getDate().equals(previousRecord.getDailyRecord().getDate())) {
+                    continue;
+                }
+            }
             builder.append(String.format(INFO_ABOUT_RECORD,
-                            timeSlot.getDailyRecord().getDate(),
-                            timeSlot.getTime(),
-                            timeSlot.getService().getName()))
+                            currentRecord.getDailyRecord().getDate(),
+                            currentRecord.getTime(),
+                            currentRecord.getService().getName()))
                     .append("\n");
         }
         builder.append("Выберите запись для отмены.");
