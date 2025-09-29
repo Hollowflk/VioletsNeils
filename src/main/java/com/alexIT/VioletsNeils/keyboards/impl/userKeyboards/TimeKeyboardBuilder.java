@@ -30,6 +30,7 @@ public class TimeKeyboardBuilder implements KeyboardBuilder {
     public InlineKeyboardMarkup build() {
         List<InlineKeyboardRow> rows = new ArrayList<>();
         Set<LocalTime> occupiedTimes = new HashSet<>();
+        LocalDate today = LocalDate.now();
 
         Optional<DailyRecord> optionalDailyRecord = recordService.findByDate(date);
         if (optionalDailyRecord.isPresent()) {
@@ -40,7 +41,12 @@ public class TimeKeyboardBuilder implements KeyboardBuilder {
         }
 
         for (Map.Entry<LocalTime, String> entry : timeSlotService.TIME_MAP.entrySet()) {
-            if (!occupiedTimes.contains(entry.getKey()) && LocalTime.now().isBefore(entry.getKey())) {
+
+            if (date.equals(today) && entry.getKey().isBefore(LocalTime.now())) {
+                continue;
+            }
+
+            if (!occupiedTimes.contains(entry.getKey())) {
                 String[] timeValue = entry.getValue().split(":");
                 rows.add(addButton(
                         String.format("на %s", entry.getValue()),
