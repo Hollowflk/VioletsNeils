@@ -2,6 +2,7 @@ package com.alexIT.VioletsNeils.commands.adminCommands;
 
 import com.alexIT.VioletsNeils.commands.Command;
 import com.alexIT.VioletsNeils.dto.TgUserDto;
+import com.alexIT.VioletsNeils.enums.RoleUser;
 import com.alexIT.VioletsNeils.enums.UserState;
 import com.alexIT.VioletsNeils.service.impl.NotificationService;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +20,8 @@ public class SendNotificationCommand implements Command {
     private final NotificationService notificationService;
 
     @Override
-    public boolean supports(String text, UserState state) {
-        if (text != null && text.startsWith("/sendNotification_") && state.equals(UserState.PREPARED)) {
+    public boolean supports(String text, UserState state, RoleUser roleUser) {
+        if (text != null && text.startsWith("/sendNotification_") && state.equals(UserState.PREPARED) && roleUser.equals(RoleUser.ADMIN)) {
             String[] textArray = text.split("_");
             String selectedDate = textArray[1];
             String[] dateArray = selectedDate.split("-");

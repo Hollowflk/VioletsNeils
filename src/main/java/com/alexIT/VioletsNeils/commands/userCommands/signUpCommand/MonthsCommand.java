@@ -2,6 +2,7 @@ package com.alexIT.VioletsNeils.commands.userCommands.signUpCommand;
 
 import com.alexIT.VioletsNeils.commands.Command;
 import com.alexIT.VioletsNeils.dto.TgUserDto;
+import com.alexIT.VioletsNeils.enums.RoleUser;
 import com.alexIT.VioletsNeils.enums.UserState;
 import com.alexIT.VioletsNeils.keyboards.impl.userKeyboards.DaysKeyboardBuilder;
 import com.alexIT.VioletsNeils.keyboards.KeyboardBuilder;
@@ -28,12 +29,12 @@ public class MonthsCommand implements Command {
     private boolean isChooseMonthCommand;
 
     @Override
-    public boolean supports(String text, UserState state) {
-        if (text != null && text.equals("/chooseMonth") && state.equals(UserState.PREPARED)) {
+    public boolean supports(String text, UserState state, RoleUser roleUser) {
+        if (text != null && text.equals("/chooseMonth") && state.equals(UserState.PREPARED) && roleUser.equals(RoleUser.USER)) {
             isChooseMonthCommand = true;
             return true;
         }
-        if (text != null && (text.startsWith("/currentMonth") || text.startsWith("/nextMonth")) && state.equals(UserState.PREPARED)) {
+        if (text != null && (text.startsWith("/currentMonth") || text.startsWith("/nextMonth")) && state.equals(UserState.PREPARED) && roleUser.equals(RoleUser.USER)) {
             String[] textArr = text.split("_");
             String[] currentDateArray = textArr[1].split("-");
             year = Integer.parseInt(currentDateArray[0]);

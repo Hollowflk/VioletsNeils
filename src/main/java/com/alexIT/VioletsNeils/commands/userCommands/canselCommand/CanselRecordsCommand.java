@@ -3,12 +3,14 @@ package com.alexIT.VioletsNeils.commands.userCommands.canselCommand;
 import com.alexIT.VioletsNeils.commands.Command;
 import com.alexIT.VioletsNeils.dto.TgUserDto;
 import com.alexIT.VioletsNeils.entity.TimeSlot;
+import com.alexIT.VioletsNeils.enums.RoleUser;
 import com.alexIT.VioletsNeils.enums.UserState;
 import com.alexIT.VioletsNeils.keyboards.impl.userKeyboards.CanselRecordKeyboard;
 import com.alexIT.VioletsNeils.service.TimeSlotService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
@@ -29,11 +31,11 @@ public class CanselRecordsCommand implements Command {
     private boolean isCanselCommand;
 
     @Override
-    public boolean supports(String text, UserState state) {
-        if (text != null && text.equals("/canselRecords") && (state.equals(UserState.PREPARED) || state.equals(UserState.COMPLETED))) {
+    public boolean supports(String text, UserState state, RoleUser roleUser) {
+        if (text != null && text.equals("/canselRecords") && (state.equals(UserState.PREPARED) || state.equals(UserState.COMPLETED)) && roleUser.equals(RoleUser.USER)) {
             return true;
         }
-        if (text != null && text.startsWith("/canselRecord_") && (state.equals(UserState.PREPARED) || state.equals(UserState.COMPLETED))) {
+        if (text != null && text.startsWith("/canselRecord_") && (state.equals(UserState.PREPARED) || state.equals(UserState.COMPLETED)) && roleUser.equals(RoleUser.USER)) {
             timeSlotId = Long.parseLong(text.substring(14));
             isCanselCommand = true;
             return true;
@@ -77,11 +79,19 @@ public class CanselRecordsCommand implements Command {
         }
         StringBuilder builder = new StringBuilder();
         builder.append("Ваши записи.").append("\n\n");
-        for (TimeSlot timeSlot : timeSlotList) {
+        for (int i = 0; i < timeSlotList.size(); i++) {
+            TimeSlot currentRecord = timeSlotList.get(i);
+            if (i > 0) {
+                TimeSlot previousRecord = timeSlotList.get(i - 1);
+                if (currentRecord.getService().getId().equals(previousRecord.getService().getId())
+                        && currentRecord.getDailyRecord().getDate().equals(previousRecord.getDailyRecord().getDate())) {
+                    continue;
+                }
+            }
             builder.append(String.format(INFO_ABOUT_RECORD,
-                            timeSlot.getDailyRecord().getDate(),
-                            timeSlot.getTime(),
-                            timeSlot.getService().getName()))
+                            currentRecord.getDailyRecord().getDate(),
+                            currentRecord.getTime(),
+                            currentRecord.getService().getName()))
                     .append("\n");
         }
         builder.append("Выберите запись для отмены.");

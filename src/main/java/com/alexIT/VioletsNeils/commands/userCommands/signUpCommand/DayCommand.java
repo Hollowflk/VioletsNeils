@@ -2,6 +2,7 @@ package com.alexIT.VioletsNeils.commands.userCommands.signUpCommand;
 
 import com.alexIT.VioletsNeils.commands.Command;
 import com.alexIT.VioletsNeils.dto.TgUserDto;
+import com.alexIT.VioletsNeils.enums.RoleUser;
 import com.alexIT.VioletsNeils.enums.UserState;
 import com.alexIT.VioletsNeils.keyboards.impl.userKeyboards.DaysKeyboardBuilder;
 import com.alexIT.VioletsNeils.keyboards.KeyboardBuilder;
@@ -36,12 +37,12 @@ public class DayCommand implements Command {
     private boolean isChooseDateCommand;
 
     @Override
-    public boolean supports(String text, UserState state) {
-        if (text != null && text.equals("/chooseDate") && state.equals(UserState.PREPARED)) {
+    public boolean supports(String text, UserState state, RoleUser roleUser) {
+        if (text != null && text.equals("/chooseDate") && state.equals(UserState.PREPARED) && roleUser.equals(RoleUser.USER)) {
             isChooseDateCommand = true;
             return true;
         }
-        if (text != null && text.startsWith("/date")) {
+        if (text != null && text.startsWith("/date") && roleUser.equals(RoleUser.USER)) {
             String[] splitText = text.split("_");
             String[] date = splitText[1].split("-");
             year = Integer.parseInt(date[0]);

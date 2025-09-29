@@ -2,6 +2,7 @@ package com.alexIT.VioletsNeils.commands.userCommands;
 
 import com.alexIT.VioletsNeils.commands.Command;
 import com.alexIT.VioletsNeils.dto.TgUserDto;
+import com.alexIT.VioletsNeils.enums.RoleUser;
 import com.alexIT.VioletsNeils.enums.UserState;
 import com.alexIT.VioletsNeils.keyboards.impl.userKeyboards.ConfirmKeyboardBuilder;
 import com.alexIT.VioletsNeils.session.UserSession;
@@ -23,8 +24,8 @@ public class FullnameCommand implements Command {
             """;
 
     @Override
-    public boolean supports(String text, UserState state) {
-        if (text != null && text.matches("^[А-ЯЁ][а-яё]+(?:-[А-ЯЁ][а-яё]+)?\\s[А-ЯЁ][а-яё]+$") && state.equals(UserState.WAIT_NAME)) {
+    public boolean supports(String text, UserState state, RoleUser roleUser) {
+        if (text != null && text.matches("^[А-ЯЁ][а-яё]+(?:-[А-ЯЁ][а-яё]+)?\\s[А-ЯЁ][а-яё]+$") && state.equals(UserState.WAIT_NAME) && roleUser.equals(RoleUser.USER)) {
             fullName = text;
             return true;
         }

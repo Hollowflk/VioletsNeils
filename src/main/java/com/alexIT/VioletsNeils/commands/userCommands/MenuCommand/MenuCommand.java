@@ -4,11 +4,10 @@ import com.alexIT.VioletsNeils.commands.Command;
 import com.alexIT.VioletsNeils.dto.TgUserDto;
 import com.alexIT.VioletsNeils.enums.RoleUser;
 import com.alexIT.VioletsNeils.enums.UserState;
+import com.alexIT.VioletsNeils.keyboards.KeyboardBuilder;
 import com.alexIT.VioletsNeils.keyboards.impl.adminKeyboards.AdminKeyboardBuilder;
 import com.alexIT.VioletsNeils.keyboards.impl.userKeyboards.DefaultKeyboardBuilder;
-import com.alexIT.VioletsNeils.keyboards.KeyboardBuilder;
 import com.alexIT.VioletsNeils.service.UserRoleService;
-import com.alexIT.VioletsNeils.session.UserSessionManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
@@ -20,13 +19,12 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 public class MenuCommand implements Command {
 
     private final UserRoleService userRoleService;
-    private final UserSessionManager sessionManager;
     private final KeyboardBuilder defaultKeyboardBuilder = new DefaultKeyboardBuilder();
     private final KeyboardBuilder adminKeyboardBuilder = new AdminKeyboardBuilder();
 
     @Override
-    public boolean supports(String text, UserState state) {
-        return text != null && text.equalsIgnoreCase("/menu") && state.equals(UserState.PREPARED);
+    public boolean supports(String text, UserState state, RoleUser roleUser) {
+        return text != null && text.equalsIgnoreCase("/menu") && state.equals(UserState.PREPARED) && (roleUser.equals(RoleUser.USER) || roleUser.equals(RoleUser.ADMIN));
     }
 
     @Override

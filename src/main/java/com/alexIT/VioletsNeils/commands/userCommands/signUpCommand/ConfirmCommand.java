@@ -6,6 +6,7 @@ import com.alexIT.VioletsNeils.dto.TgUserDto;
 import com.alexIT.VioletsNeils.entity.DailyRecord;
 import com.alexIT.VioletsNeils.entity.TgUser;
 import com.alexIT.VioletsNeils.entity.TimeSlot;
+import com.alexIT.VioletsNeils.enums.RoleUser;
 import com.alexIT.VioletsNeils.enums.UserState;
 import com.alexIT.VioletsNeils.service.TimeSlotService;
 import com.alexIT.VioletsNeils.service.impl.DailyRecordServiceImpl;
@@ -51,8 +52,8 @@ public class ConfirmCommand implements Command {
     private final TimeSlotService timeSlotService;
 
     @Override
-    public boolean supports(String text, UserState state) {
-        return text != null && text.equals("/confirm") && state.equals(UserState.COMPLETED);
+    public boolean supports(String text, UserState state, RoleUser roleUser) {
+        return text != null && text.equals("/confirm") && state.equals(UserState.COMPLETED) && roleUser.equals(RoleUser.USER);
     }
 
     @Override

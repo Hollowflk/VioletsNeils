@@ -4,7 +4,9 @@ import com.alexIT.VioletsNeils.commands.Command;
 import com.alexIT.VioletsNeils.commands.userCommands.UnknowCommand;
 import com.alexIT.VioletsNeils.dto.TgUserDto;
 import com.alexIT.VioletsNeils.entity.TgUser;
+import com.alexIT.VioletsNeils.enums.RoleUser;
 import com.alexIT.VioletsNeils.enums.UserState;
+import com.alexIT.VioletsNeils.service.UserRoleService;
 import com.alexIT.VioletsNeils.service.impl.UserServiceImpl;
 import com.alexIT.VioletsNeils.session.UserSession;
 import com.alexIT.VioletsNeils.session.UserSessionManager;
@@ -26,6 +28,7 @@ public class CommandDispatcher {
     private final UnknowCommand unknowCommand;
     private final UserServiceImpl userService;
     private final UserSessionManager sessionManager;
+    private final UserRoleService userRoleService;
 
     public BotApiMethod<?> handler(Update update) {
         TgUserDto userDto = userService.createUserDto(update);
@@ -35,11 +38,12 @@ public class CommandDispatcher {
             userSession.setState(UserState.PREPARED);
             userSession.setPhoneNumber(optionalTgUser.get().getPhoneNumber());
             userSession.setFullName(optionalTgUser.get().getFullName());
+            userSession.setRoleUser(userRoleService.getRole(userSession.getUserId()));
         }
         String textCommand = getText(update);
         log.info("Получена команда {}", textCommand);
         Command command = commandList.stream()
-                .filter(cmd -> cmd.supports(textCommand, userSession.getState()))
+                .filter(cmd -> cmd.supports(textCommand, userSession.getState(), userSession.getRoleUser()))
                 .findFirst()
                 .orElse(unknowCommand);
         log.info("Выполняется команда {}", command.getClass().getName());

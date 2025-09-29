@@ -2,6 +2,7 @@ package com.alexIT.VioletsNeils.commands.adminCommands;
 
 import com.alexIT.VioletsNeils.commands.Command;
 import com.alexIT.VioletsNeils.dto.TgUserDto;
+import com.alexIT.VioletsNeils.enums.RoleUser;
 import com.alexIT.VioletsNeils.enums.UserState;
 import com.alexIT.VioletsNeils.keyboards.impl.adminKeyboards.AdminMonthKeyboardBuilder;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +18,8 @@ public class GetDateForNotificationsCommand implements Command {
     private final AdminMonthKeyboardBuilder adminMonthKeyboardBuilder;
 
     @Override
-    public boolean supports(String text, UserState state) {
-        return text != null && text.equals("/getDateForNotifications") && state.equals(UserState.PREPARED);
+    public boolean supports(String text, UserState state, RoleUser roleUser) {
+        return text != null && text.equals("/getDateForNotifications") && state.equals(UserState.PREPARED) && roleUser.equals(RoleUser.ADMIN);
     }
 
     @Override

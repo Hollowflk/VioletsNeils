@@ -2,6 +2,7 @@ package com.alexIT.VioletsNeils.commands.userCommands;
 
 import com.alexIT.VioletsNeils.commands.Command;
 import com.alexIT.VioletsNeils.dto.TgUserDto;
+import com.alexIT.VioletsNeils.enums.RoleUser;
 import com.alexIT.VioletsNeils.enums.UserState;
 import com.alexIT.VioletsNeils.keyboards.impl.userKeyboards.MenuKeyboardBuilder;
 import com.alexIT.VioletsNeils.session.UserSession;
@@ -21,8 +22,8 @@ public class PhoneNumberCommand implements Command {
     private String phoneNumber;
 
     @Override
-    public boolean supports(String text, UserState state) {
-        if (text.matches("^8\\d{10}$") && state.equals(UserState.WAIT_PHONE)) {
+    public boolean supports(String text, UserState state, RoleUser roleUser) {
+        if (text.matches("^8\\d{10}$") && state.equals(UserState.WAIT_PHONE) && roleUser.equals(RoleUser.USER)) {
             phoneNumber = text;
             return true;
         }

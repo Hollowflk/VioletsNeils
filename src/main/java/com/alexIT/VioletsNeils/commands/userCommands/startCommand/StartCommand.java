@@ -3,6 +3,7 @@ package com.alexIT.VioletsNeils.commands.userCommands.startCommand;
 import com.alexIT.VioletsNeils.commands.Command;
 import com.alexIT.VioletsNeils.dto.TgUserDto;
 import com.alexIT.VioletsNeils.entity.TgUser;
+import com.alexIT.VioletsNeils.enums.RoleUser;
 import com.alexIT.VioletsNeils.enums.UserState;
 import com.alexIT.VioletsNeils.keyboards.impl.userKeyboards.MenuKeyboardBuilder;
 import com.alexIT.VioletsNeils.service.impl.UserServiceImpl;
@@ -34,8 +35,8 @@ public class StartCommand implements Command {
             """;
 
     @Override
-    public boolean supports(String text, UserState state) {
-        return text != null && text.equals("/start") && (state.equals(UserState.NEW_USER) || state.equals(UserState.PREPARED));
+    public boolean supports(String text, UserState state, RoleUser roleUser) {
+        return text != null && text.equals("/start") && (state.equals(UserState.NEW_USER) || state.equals(UserState.PREPARED) && roleUser.equals(RoleUser.USER));
     }
 
     @Override
