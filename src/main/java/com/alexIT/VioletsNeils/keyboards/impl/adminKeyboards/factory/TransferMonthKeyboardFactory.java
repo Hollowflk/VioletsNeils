@@ -1,5 +1,6 @@
-package com.alexIT.VioletsNeils.keyboards.impl.adminKeyboards;
+package com.alexIT.VioletsNeils.keyboards.impl.adminKeyboards.factory;
 
+import com.alexIT.VioletsNeils.keyboards.impl.adminKeyboards.TransferMonthKeyboardAdmin;
 import org.springframework.stereotype.Component;
 
 @Component

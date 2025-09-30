@@ -1,6 +1,7 @@
-package com.alexIT.VioletsNeils.keyboards.impl.adminKeyboards;
+package com.alexIT.VioletsNeils.keyboards.impl.adminKeyboards.factory;
 
 import com.alexIT.VioletsNeils.entity.TimeSlot;
+import com.alexIT.VioletsNeils.keyboards.impl.adminKeyboards.TransferRecordSelectionKeyboard;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

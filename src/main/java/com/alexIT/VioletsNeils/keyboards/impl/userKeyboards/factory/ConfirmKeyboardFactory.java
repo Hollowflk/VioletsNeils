@@ -1,5 +1,6 @@
-package com.alexIT.VioletsNeils.keyboards.impl.userKeyboards;
+package com.alexIT.VioletsNeils.keyboards.impl.userKeyboards.factory;
 
+import com.alexIT.VioletsNeils.keyboards.impl.userKeyboards.ConfirmKeyboardBuilder;
 import org.springframework.stereotype.Component;
 
 @Component

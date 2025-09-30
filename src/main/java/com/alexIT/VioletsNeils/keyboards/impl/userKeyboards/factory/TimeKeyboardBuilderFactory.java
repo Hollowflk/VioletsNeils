@@ -1,5 +1,6 @@
-package com.alexIT.VioletsNeils.keyboards.impl.userKeyboards;
+package com.alexIT.VioletsNeils.keyboards.impl.userKeyboards.factory;
 
+import com.alexIT.VioletsNeils.keyboards.impl.userKeyboards.TimeKeyboardBuilder;
 import com.alexIT.VioletsNeils.service.TimeSlotService;
 import com.alexIT.VioletsNeils.service.impl.DailyRecordServiceImpl;
 import org.springframework.stereotype.Component;

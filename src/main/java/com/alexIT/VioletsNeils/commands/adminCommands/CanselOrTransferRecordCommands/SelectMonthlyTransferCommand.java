@@ -5,7 +5,7 @@ import com.alexIT.VioletsNeils.dto.TgUserDto;
 import com.alexIT.VioletsNeils.enums.RoleUser;
 import com.alexIT.VioletsNeils.enums.UserState;
 import com.alexIT.VioletsNeils.keyboards.KeyboardBuilder;
-import com.alexIT.VioletsNeils.keyboards.impl.adminKeyboards.TransferRecordDateSelectionKeyboardFactory;
+import com.alexIT.VioletsNeils.keyboards.impl.adminKeyboards.factory.TransferRecordDateSelectionKeyboardFactory;
 import com.alexIT.VioletsNeils.service.impl.DailyRecordServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

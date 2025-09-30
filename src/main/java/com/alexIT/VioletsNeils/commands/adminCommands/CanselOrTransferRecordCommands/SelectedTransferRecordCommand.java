@@ -5,7 +5,7 @@ import com.alexIT.VioletsNeils.dto.TgUserDto;
 import com.alexIT.VioletsNeils.enums.RoleUser;
 import com.alexIT.VioletsNeils.enums.UserState;
 import com.alexIT.VioletsNeils.keyboards.KeyboardBuilder;
-import com.alexIT.VioletsNeils.keyboards.impl.adminKeyboards.TransferMonthKeyboardFactory;
+import com.alexIT.VioletsNeils.keyboards.impl.adminKeyboards.factory.TransferMonthKeyboardFactory;
 import com.alexIT.VioletsNeils.session.UserSession;
 import com.alexIT.VioletsNeils.session.UserSessionManager;
 import lombok.RequiredArgsConstructor;

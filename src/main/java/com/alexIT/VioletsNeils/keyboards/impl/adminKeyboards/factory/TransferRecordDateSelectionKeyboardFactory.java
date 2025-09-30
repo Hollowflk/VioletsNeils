@@ -1,5 +1,6 @@
-package com.alexIT.VioletsNeils.keyboards.impl.adminKeyboards;
+package com.alexIT.VioletsNeils.keyboards.impl.adminKeyboards.factory;
 
+import com.alexIT.VioletsNeils.keyboards.impl.adminKeyboards.TransferRecordDateSelectionKeyboard;
 import com.alexIT.VioletsNeils.service.impl.DailyRecordServiceImpl;
 import org.springframework.stereotype.Component;
 
