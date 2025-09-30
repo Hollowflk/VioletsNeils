@@ -4,7 +4,6 @@ import com.alexIT.VioletsNeils.commands.Command;
 import com.alexIT.VioletsNeils.dto.TgUserDto;
 import com.alexIT.VioletsNeils.enums.RoleUser;
 import com.alexIT.VioletsNeils.enums.UserState;
-import com.alexIT.VioletsNeils.keyboards.impl.userKeyboards.ConfirmKeyboardBuilder;
 import com.alexIT.VioletsNeils.session.UserSession;
 import com.alexIT.VioletsNeils.session.UserSessionManager;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +17,6 @@ public class FullnameCommand implements Command {
 
     private final UserSessionManager sessionManager;
     private String fullName;
-    private final ConfirmKeyboardBuilder confirmKeyboardBuilder;
     private static final String INFO = """
             Введите номер телефона
             """;

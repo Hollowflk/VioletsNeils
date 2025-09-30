@@ -6,8 +6,11 @@ import com.alexIT.VioletsNeils.entity.DailyRecord;
 import com.alexIT.VioletsNeils.entity.TimeSlot;
 import com.alexIT.VioletsNeils.enums.RoleUser;
 import com.alexIT.VioletsNeils.enums.UserState;
+import com.alexIT.VioletsNeils.keyboards.KeyboardBuilder;
 import com.alexIT.VioletsNeils.keyboards.impl.adminKeyboards.TransferMonthKeyboardAdmin;
+import com.alexIT.VioletsNeils.keyboards.impl.adminKeyboards.TransferMonthKeyboardFactory;
 import com.alexIT.VioletsNeils.keyboards.impl.adminKeyboards.TransferRecordSelectionKeyboard;
+import com.alexIT.VioletsNeils.keyboards.impl.adminKeyboards.TransferRecordSelectionKeyboardFactory;
 import com.alexIT.VioletsNeils.service.impl.DailyRecordServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -23,8 +26,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class TransferRecordCommand implements Command {
 
-    private final TransferMonthKeyboardAdmin transferMonthKeyboardAdmin;
-    private final TransferRecordSelectionKeyboard selectionKeyboard;
+    private final TransferMonthKeyboardFactory factory;
+    private final TransferRecordSelectionKeyboardFactory transferRecordSelectionKeyboardFactory;
     private final DailyRecordServiceImpl dailyRecordService;
     private boolean isTransferRecord;
     private LocalDate selectedDate;
@@ -60,11 +63,12 @@ public class TransferRecordCommand implements Command {
         if (isTransferRecord) {
             return selectRecord(userDto);
         }
-        InlineKeyboardMarkup keyboard = transferMonthKeyboardAdmin.build();
+        KeyboardBuilder keyboardBuilder = factory.create("transferRecord", "/canselOrTransferRecord");
+        InlineKeyboardMarkup keyboard = keyboardBuilder.build();
         return EditMessageText.builder()
                 .chatId(userDto.getChatId())
                 .messageId(userDto.getMessageId())
-                .text("Выберите месяц.")
+                .text("Выберите месяц для переноса.")
                 .replyMarkup(keyboard)
                 .build();
     }
@@ -75,8 +79,10 @@ public class TransferRecordCommand implements Command {
                 .stream()
                 .sorted()
                 .toList();
-        selectionKeyboard.setTimeSlotList(timeSlotList);
-        InlineKeyboardMarkup keyboard = selectionKeyboard.build();
+        String backCallBack = selectedDate.getMonth().equals(LocalDate.now().getMonth()) ? "/transferRecordCurrentMonthAdmin" : "/transferRecordNextMonthAdmin";
+        KeyboardBuilder keyboardBuilder = transferRecordSelectionKeyboardFactory.create(timeSlotList,
+                "/selectedTransferRecord_%s", backCallBack);
+        InlineKeyboardMarkup keyboard = keyboardBuilder.build();
         isTransferRecord = false;
         return EditMessageText.builder()
                 .chatId(dto.getChatId())

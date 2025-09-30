@@ -28,6 +28,9 @@ public class AdminDaysKeyboardBuilder implements KeyboardBuilder {
         List<InlineKeyboardRow> rows = new ArrayList<>();
         InlineKeyboardRow row = new InlineKeyboardRow();
         for (DailyRecord dailyRecord : records) {
+            if (dailyRecord.getTimeSlotList().isEmpty()) {
+                continue;
+            }
             row.add(InlineKeyboardButton.builder()
                     .text(String.valueOf(dailyRecord.getDate()))
                     .callbackData(String.format("/sendNotification_%s", dailyRecord.getDate()))

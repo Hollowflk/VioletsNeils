@@ -26,6 +26,10 @@ public class TimeSlotService {
         TIME_MAP.put(LocalTime.of(17, 0), "17:00");
     }
 
+    public Optional<TimeSlot> findById(Long id) {
+        return repository.findById(id);
+    }
+
     public List<TimeSlot> findAll() {
         return repository.findAll();
     }

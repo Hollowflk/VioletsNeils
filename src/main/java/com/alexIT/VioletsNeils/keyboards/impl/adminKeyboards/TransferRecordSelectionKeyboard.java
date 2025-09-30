@@ -2,9 +2,6 @@ package com.alexIT.VioletsNeils.keyboards.impl.adminKeyboards;
 
 import com.alexIT.VioletsNeils.entity.TimeSlot;
 import com.alexIT.VioletsNeils.keyboards.KeyboardBuilder;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
@@ -12,12 +9,17 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
-@RequiredArgsConstructor
 public class TransferRecordSelectionKeyboard implements KeyboardBuilder {
 
-    @Setter
-    private List<TimeSlot> timeSlotList;
+    private final List<TimeSlot> timeSlotList;
+    private final String callbackPrefix;
+    private final String backCallbackPrefix;
+
+    public TransferRecordSelectionKeyboard(List<TimeSlot> timeSlotList, String callbackPrefix, String backCallbackPrefix) {
+        this.timeSlotList = timeSlotList;
+        this.callbackPrefix = callbackPrefix;
+        this.backCallbackPrefix = backCallbackPrefix;
+    }
 
     @Override
     public InlineKeyboardMarkup build() {
@@ -31,8 +33,9 @@ public class TransferRecordSelectionKeyboard implements KeyboardBuilder {
                     continue;
                 }
             }
-            rows.add(addButton(currentRecord.getTime().toString(), String.format("/selectedTransferRecord_%s", currentRecord.getId())));
+            rows.add(addButton(currentRecord.getTime().toString(), String.format(callbackPrefix, currentRecord.getId())));
         }
+        rows.add(addButton("Назад", backCallbackPrefix));
         return new InlineKeyboardMarkup(rows);
     }
 

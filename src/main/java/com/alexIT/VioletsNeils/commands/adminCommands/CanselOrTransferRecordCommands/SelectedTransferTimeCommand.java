@@ -1,4 +1,4 @@
-package com.alexIT.VioletsNeils.commands.userCommands.signUpCommand;
+package com.alexIT.VioletsNeils.commands.adminCommands.CanselOrTransferRecordCommands;
 
 import com.alexIT.VioletsNeils.commands.Command;
 import com.alexIT.VioletsNeils.dto.TgUserDto;
@@ -19,57 +19,47 @@ import java.time.LocalTime;
 
 @Component
 @RequiredArgsConstructor
-public class TimeCommand implements Command {
+public class SelectedTransferTimeCommand implements Command {
 
-    private LocalTime timeRecord;
     private final UserSessionManager sessionManager;
     private final ConfirmKeyboardFactory confirmKeyboardFactory;
-    private static final String SERVICE_INFO = """
-            Запись на %s %s.
-            Время записи %s.
-            Услуга: %s
-            Цена услуги: %d руб.
-            Продолжительность: %s
-            ФИО: %s
-            Номер телефона: %s
-            Подтвердить запись ?
+    private static final String INFO_ABOUT_TRANSFER = """
+            Перенести запись на %s %s 
+            на время %s
+            Подтвердить ?
             """;
 
     @Override
     public boolean supports(String text, UserState state, RoleUser roleUser) {
-        if (text != null && text.startsWith("/record") && state.equals(UserState.PREPARED) && roleUser.equals(RoleUser.USER)) {
-            String[] splitText = text.split("_");
-            timeRecord = LocalTime.of(Integer.parseInt(splitText[1]), 0, 0);
-            return true;
-        }
-        return false;
+        return text != null && text.startsWith("/transferTime_")
+                && state.equals(UserState.PREPARED)
+                && roleUser.equals(RoleUser.ADMIN);
     }
 
     @Override
     public BotApiMethod<?> handler(TgUserDto userDto) {
         UserSession userSession = sessionManager.getOrCreateSession(userDto.getUserId());
-        userSession.setSelectedTime(timeRecord);
-        userSession.setState(UserState.COMPLETED);
-        KeyboardBuilder keyboardBuilder = confirmKeyboardFactory.create("/confirm", "/signUp");
+        String[] textArr = userDto.getText().split("_");
+        LocalTime selectedTime = LocalTime.of(
+                Integer.parseInt(textArr[1]),
+                0
+        );
+        userSession.setSelectedTime(selectedTime);
+        KeyboardBuilder keyboardBuilder = confirmKeyboardFactory.create("/confirmTransfer", "/menu");
         InlineKeyboardMarkup keyboard = keyboardBuilder.build();
         return EditMessageText.builder()
                 .chatId(userDto.getChatId())
                 .messageId(userDto.getMessageId())
-                .text(createServiceInfoMessage(userSession))
+                .text(createMessage(userSession))
                 .replyMarkup(keyboard)
                 .build();
     }
 
-    private String createServiceInfoMessage(UserSession userSession) {
+    private String createMessage(UserSession userSession) {
         String monthName = MonthsAndDaysUtils.getNameMonth(userSession.getSelectedDate().getMonth().getValue());
-        return String.format(SERVICE_INFO,
+        return String.format(INFO_ABOUT_TRANSFER,
                 userSession.getSelectedDate().getDayOfMonth(),
                 MonthsAndDaysUtils.monthGenitiveForms.get(monthName),
-                userSession.getSelectedTime(),
-                userSession.getSelectedService().getName(),
-                userSession.getSelectedService().getPrice(),
-                userSession.getSelectedService().getDuration(),
-                userSession.getFullName(),
-                userSession.getPhoneNumber());
+                userSession.getSelectedTime());
     }
 }

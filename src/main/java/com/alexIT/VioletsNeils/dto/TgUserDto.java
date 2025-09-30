@@ -2,7 +2,6 @@ package com.alexIT.VioletsNeils.dto;
 
 import com.alexIT.VioletsNeils.entity.Service;
 import com.alexIT.VioletsNeils.enums.RoleUser;
-
 import lombok.Data;
 
 @Data
@@ -15,6 +14,7 @@ public class TgUserDto {
     private Service service;
     private String fullName;
     private String phoneNumber;
+    private String text;
 
     public TgUserDto(Long userId, Long chatId, Integer messageId, RoleUser role) {
         this.userId = userId;

@@ -2,7 +2,7 @@ package com.alexIT.VioletsNeils.keyboards.impl.userKeyboards;
 
 import com.alexIT.VioletsNeils.entity.DailyRecord;
 import com.alexIT.VioletsNeils.keyboards.KeyboardBuilder;
-import com.alexIT.VioletsNeils.repository.DailyRepository;
+import com.alexIT.VioletsNeils.service.impl.DailyRecordServiceImpl;
 import com.alexIT.VioletsNeils.utils.MonthsAndDaysUtils;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -17,15 +17,19 @@ import java.util.stream.Collectors;
 
 public class DaysKeyboardBuilder implements KeyboardBuilder {
 
-    private final DailyRepository repository;
+    private final DailyRecordServiceImpl dailyRecordService;
     private final int year;
     private final Month month;
-    private static final String CALLBACK_TEXT = "/date_%d-%d-%d";
+    private final String callbackPrefix;
+    private final String backCallbackPrefix;
 
-    public DaysKeyboardBuilder(DailyRepository repository, int year, Month month) {
-        this.repository = repository;
+    public DaysKeyboardBuilder(DailyRecordServiceImpl dailyRecordService, int year, Month month,
+                               String callbackPrefix, String backCallbackPrefix) {
+        this.dailyRecordService = dailyRecordService;
         this.year = year;
         this.month = month;
+        this.callbackPrefix = callbackPrefix;
+        this.backCallbackPrefix = backCallbackPrefix;
     }
 
     @Override
@@ -40,7 +44,7 @@ public class DaysKeyboardBuilder implements KeyboardBuilder {
 
         LocalDate start = LocalDate.of(year, monthValue, 1);
         LocalDate end = LocalDate.of(year, monthValue, daysInMonth);
-        List<DailyRecord> records = repository.findAllByDateBetween(start, end);
+        List<DailyRecord> records = dailyRecordService.findAllByDateBetween(start, end);
 
         Set<LocalDate> fullyBookedDates = records.stream()
                 .filter(r -> r.getTimeSlotList().size() >= 4)
@@ -62,7 +66,7 @@ public class DaysKeyboardBuilder implements KeyboardBuilder {
             } else {
                 button = InlineKeyboardButton.builder()
                         .text(String.valueOf(i))
-                        .callbackData(String.format(CALLBACK_TEXT, year, monthValue, i))
+                        .callbackData(String.format(callbackPrefix, year, monthValue, i))
                         .build();
             }
             row.add(button);
@@ -78,7 +82,7 @@ public class DaysKeyboardBuilder implements KeyboardBuilder {
 
         InlineKeyboardButton back = InlineKeyboardButton.builder()
                 .text("Назад")
-                .callbackData("/chooseMonth")
+                .callbackData(backCallbackPrefix)
                 .build();
         rows.add(new InlineKeyboardRow(back));
         return InlineKeyboardMarkup.builder().keyboard(rows).build();

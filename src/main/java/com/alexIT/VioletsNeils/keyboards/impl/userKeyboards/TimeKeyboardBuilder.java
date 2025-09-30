@@ -16,15 +16,22 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
 
-@Component
-@RequiredArgsConstructor
 public class TimeKeyboardBuilder implements KeyboardBuilder {
 
     private final DailyRecordServiceImpl recordService;
     private final TimeSlotService timeSlotService;
+    private final LocalDate date;
+    private final String callbackPrefix;
+    private final String backCallbackPrefix;
 
-    @Setter
-    private LocalDate date;
+    public TimeKeyboardBuilder(DailyRecordServiceImpl recordService, TimeSlotService timeSlotService, LocalDate date,
+                               String callbackPrefix, String backCallbackPrefix) {
+        this.recordService = recordService;
+        this.timeSlotService = timeSlotService;
+        this.date = date;
+        this.callbackPrefix = callbackPrefix;
+        this.backCallbackPrefix = backCallbackPrefix;
+    }
 
     @Override
     public InlineKeyboardMarkup build() {
@@ -50,14 +57,14 @@ public class TimeKeyboardBuilder implements KeyboardBuilder {
                 String[] timeValue = entry.getValue().split(":");
                 rows.add(addButton(
                         String.format("на %s", entry.getValue()),
-                        String.format("/record_%s", timeValue[0])
+                        String.format(callbackPrefix, timeValue[0])
                 ));
             }
         }
 
         InlineKeyboardButton backButton = InlineKeyboardButton.builder()
                 .text("Назад")
-                .callbackData("/chooseDate")
+                .callbackData(backCallbackPrefix)
                 .build();
 
         rows.add(new InlineKeyboardRow(backButton));

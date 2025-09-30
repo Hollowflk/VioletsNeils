@@ -4,9 +4,6 @@ import com.alexIT.VioletsNeils.entity.DailyRecord;
 import com.alexIT.VioletsNeils.keyboards.KeyboardBuilder;
 import com.alexIT.VioletsNeils.service.impl.DailyRecordServiceImpl;
 import com.alexIT.VioletsNeils.utils.MonthsAndDaysUtils;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
@@ -15,16 +12,22 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
-@RequiredArgsConstructor
 public class TransferRecordDateSelectionKeyboard implements KeyboardBuilder {
 
-    @Setter
-    private LocalDate selectedMonth;
     private final DailyRecordServiceImpl dailyRecordService;
+    private final LocalDate selectedMonth;
+    private final String callbackPrefix;
+    private final String backCallbackPrefix;
     private static final String DESCRIPTION = """
             %d %s
             """;
+
+    public TransferRecordDateSelectionKeyboard(DailyRecordServiceImpl dailyRecordService, LocalDate selectedMonth, String callbackPrefix, String backCallbackPrefix) {
+        this.dailyRecordService = dailyRecordService;
+        this.selectedMonth = selectedMonth;
+        this.callbackPrefix = callbackPrefix;
+        this.backCallbackPrefix = backCallbackPrefix;
+    }
 
     @Override
     public InlineKeyboardMarkup build() {
@@ -40,12 +43,16 @@ public class TransferRecordDateSelectionKeyboard implements KeyboardBuilder {
                 .toList();
 
         for (DailyRecord dailyRecord : dailyRecords) {
+            if (dailyRecord.getTimeSlotList().isEmpty()) {
+                continue;
+            }
             String monthName = MonthsAndDaysUtils.getNameMonth(dailyRecord.getDate().getMonth().getValue());
             rows.add(addButton(String.format(DESCRIPTION,
-                    dailyRecord.getDate().getDayOfMonth(),
-                    MonthsAndDaysUtils.monthGenitiveForms.get(monthName)),
-                    String.format("/transferRecord_%s", dailyRecord.getDate())));
+                            dailyRecord.getDate().getDayOfMonth(),
+                            MonthsAndDaysUtils.monthGenitiveForms.get(monthName)),
+                    String.format(callbackPrefix, dailyRecord.getDate())));
         }
+        rows.add(addButton("Назад", backCallbackPrefix));
         return new InlineKeyboardMarkup(rows);
     }
 

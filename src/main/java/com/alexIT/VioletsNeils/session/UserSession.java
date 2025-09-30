@@ -16,8 +16,10 @@ public class UserSession {
     private UserState state;
     private final Long userId;
     private Service selectedService;
+    private Long selectedRecordId;
     private LocalDate selectedDate;
     private LocalTime selectedTime;
+    private LocalDate selectedMonth;
     private String phoneNumber;
     private String fullName;
     private RoleUser roleUser;

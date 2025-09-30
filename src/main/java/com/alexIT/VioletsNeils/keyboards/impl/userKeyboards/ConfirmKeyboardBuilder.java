@@ -8,19 +8,26 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 
 import java.util.List;
 
-@Component
 public class ConfirmKeyboardBuilder implements KeyboardBuilder {
+
+    private final String callbackPrefix;
+    private final String backCallbackPrefix;
+
+    public ConfirmKeyboardBuilder(String callbackPrefix, String backCallbackPrefix) {
+        this.callbackPrefix = callbackPrefix;
+        this.backCallbackPrefix = backCallbackPrefix;
+    }
 
     @Override
     public InlineKeyboardMarkup build() {
         InlineKeyboardButton yesButton = InlineKeyboardButton.builder()
                 .text("Да")
-                .callbackData("/confirm")
+                .callbackData(callbackPrefix)
                 .build();
 
         InlineKeyboardButton noButton = InlineKeyboardButton.builder()
                 .text("Нет")
-                .callbackData("/signUp")
+                .callbackData(backCallbackPrefix)
                 .build();
 
         InlineKeyboardRow row = new InlineKeyboardRow();

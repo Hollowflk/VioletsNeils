@@ -6,8 +6,12 @@ import com.alexIT.VioletsNeils.enums.RoleUser;
 import com.alexIT.VioletsNeils.enums.UserState;
 import com.alexIT.VioletsNeils.keyboards.impl.userKeyboards.DaysKeyboardBuilder;
 import com.alexIT.VioletsNeils.keyboards.KeyboardBuilder;
+import com.alexIT.VioletsNeils.keyboards.impl.userKeyboards.DaysKeyboardFactory;
 import com.alexIT.VioletsNeils.keyboards.impl.userKeyboards.TimeKeyboardBuilder;
+import com.alexIT.VioletsNeils.keyboards.impl.userKeyboards.TimeKeyboardBuilderFactory;
 import com.alexIT.VioletsNeils.repository.DailyRepository;
+import com.alexIT.VioletsNeils.service.TimeSlotService;
+import com.alexIT.VioletsNeils.service.impl.DailyRecordServiceImpl;
 import com.alexIT.VioletsNeils.session.UserSession;
 import com.alexIT.VioletsNeils.session.UserSessionManager;
 import com.alexIT.VioletsNeils.utils.MonthsAndDaysUtils;
@@ -28,9 +32,11 @@ public class DayCommand implements Command {
             Вы выбрали дату: %d %s.
             Выберите время для записи
             """;
-    private final TimeKeyboardBuilder timeKeyboardBuilder;
+    private final TimeKeyboardBuilderFactory timeKeyboardBuilderFactory;
     private final UserSessionManager sessionManager;
-    private final DailyRepository dailyRepository;
+    private final DailyRecordServiceImpl dailyRecordService;
+    private final TimeSlotService timeSlotService;
+    private final DaysKeyboardFactory daysKeyboardFactory;
     private int year;
     private int month;
     private int day;
@@ -57,7 +63,7 @@ public class DayCommand implements Command {
     public BotApiMethod<?> handler(TgUserDto userDto) {
         if (isChooseDateCommand) {
             Month currentMonth = Month.of(month);
-            KeyboardBuilder keyboardBuilder = new DaysKeyboardBuilder(dailyRepository, year, currentMonth);
+            KeyboardBuilder keyboardBuilder = daysKeyboardFactory.create(dailyRecordService, year, currentMonth, "/date_%d-%d-%d", "/chooseMonth");
             InlineKeyboardMarkup keyboard = keyboardBuilder.build();
             isChooseDateCommand = false;
             return EditMessageText.builder()
@@ -71,8 +77,8 @@ public class DayCommand implements Command {
         LocalDate selectedDate = LocalDate.of(year, month, day);
         UserSession userSession = sessionManager.getOrCreateSession(userDto.getUserId());
         userSession.setSelectedDate(selectedDate);
-        timeKeyboardBuilder.setDate(selectedDate);
-        InlineKeyboardMarkup keyboard = timeKeyboardBuilder.build();
+        KeyboardBuilder keyboardBuilder = timeKeyboardBuilderFactory.create(dailyRecordService, timeSlotService, selectedDate, "/record_%s", "/chooseDate");
+        InlineKeyboardMarkup keyboard = keyboardBuilder.build();
         return EditMessageText.builder()
                 .chatId(userDto.getChatId())
                 .messageId(userDto.getMessageId())

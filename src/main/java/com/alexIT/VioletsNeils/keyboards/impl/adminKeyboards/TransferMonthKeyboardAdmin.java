@@ -2,7 +2,6 @@ package com.alexIT.VioletsNeils.keyboards.impl.adminKeyboards;
 
 import com.alexIT.VioletsNeils.keyboards.KeyboardBuilder;
 import com.alexIT.VioletsNeils.utils.MonthsAndDaysUtils;
-import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
@@ -11,8 +10,15 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
 public class TransferMonthKeyboardAdmin implements KeyboardBuilder {
+
+    private final String callbackPrefix;
+    private final String backCallbackPrefix;
+
+    public TransferMonthKeyboardAdmin(String callbackPrefix, String backCallbackPrefix) {
+        this.callbackPrefix = callbackPrefix;
+        this.backCallbackPrefix = backCallbackPrefix;
+    }
 
     @Override
     public InlineKeyboardMarkup build() {
@@ -20,8 +26,9 @@ public class TransferMonthKeyboardAdmin implements KeyboardBuilder {
         LocalDate localDate = LocalDate.now();
         String currentMonthName = MonthsAndDaysUtils.getNameMonth(localDate.getMonth().getValue());
         String nextMonthName = MonthsAndDaysUtils.getNameMonth(localDate.plusMonths(1).getMonth().getValue());
-        rows.add(addButton(currentMonthName, "/transferRecordCurrentMonthAdmin"));
-        rows.add(addButton(nextMonthName, "/transferRecordNextMonthAdmin"));
+        rows.add(addButton(currentMonthName, "/" + callbackPrefix + "CurrentMonthAdmin"));
+        rows.add(addButton(nextMonthName, "/" + callbackPrefix + "NextMonthAdmin"));
+        rows.add(addButton("Назад", backCallbackPrefix));
         return new InlineKeyboardMarkup(rows);
     }
 

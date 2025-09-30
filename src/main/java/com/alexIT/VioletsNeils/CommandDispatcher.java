@@ -41,6 +41,7 @@ public class CommandDispatcher {
             userSession.setRoleUser(userRoleService.getRole(userSession.getUserId()));
         }
         String textCommand = getText(update);
+        userDto.setText(textCommand);
         log.info("Получена команда {}", textCommand);
         Command command = commandList.stream()
                 .filter(cmd -> cmd.supports(textCommand, userSession.getState(), userSession.getRoleUser()))

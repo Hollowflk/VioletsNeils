@@ -4,10 +4,10 @@ import com.alexIT.VioletsNeils.commands.Command;
 import com.alexIT.VioletsNeils.dto.TgUserDto;
 import com.alexIT.VioletsNeils.enums.RoleUser;
 import com.alexIT.VioletsNeils.enums.UserState;
-import com.alexIT.VioletsNeils.keyboards.impl.userKeyboards.DaysKeyboardBuilder;
 import com.alexIT.VioletsNeils.keyboards.KeyboardBuilder;
+import com.alexIT.VioletsNeils.keyboards.impl.userKeyboards.DaysKeyboardFactory;
 import com.alexIT.VioletsNeils.keyboards.impl.userKeyboards.MonthKeyboardBuilder;
-import com.alexIT.VioletsNeils.repository.DailyRepository;
+import com.alexIT.VioletsNeils.service.impl.DailyRecordServiceImpl;
 import com.alexIT.VioletsNeils.session.UserSession;
 import com.alexIT.VioletsNeils.session.UserSessionManager;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +24,9 @@ public class MonthsCommand implements Command {
 
     private int year;
     private int month;
-    private final DailyRepository dailyRepository;
+    private final DailyRecordServiceImpl dailyRecordService;
     private final UserSessionManager sessionManager;
+    private final DaysKeyboardFactory daysKeyboardFactory;
     private boolean isChooseMonthCommand;
 
     @Override
@@ -59,7 +60,7 @@ public class MonthsCommand implements Command {
                     .build();
         }
         Month currentMonth = Month.of(month);
-        KeyboardBuilder keyboardBuilder = new DaysKeyboardBuilder(dailyRepository, year, currentMonth);
+        KeyboardBuilder keyboardBuilder = daysKeyboardFactory.create(dailyRecordService, year, currentMonth, "/date_%d-%d-%d", "/chooseMonth");
         InlineKeyboardMarkup keyboard = keyboardBuilder.build();
         return EditMessageText.builder()
                 .chatId(userDto.getChatId())
