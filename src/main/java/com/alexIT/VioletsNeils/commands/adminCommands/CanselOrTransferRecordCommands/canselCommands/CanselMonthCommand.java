@@ -1,4 +1,4 @@
-package com.alexIT.VioletsNeils.commands.adminCommands.CanselOrTransferRecordCommands;
+package com.alexIT.VioletsNeils.commands.adminCommands.CanselOrTransferRecordCommands.canselCommands;
 
 import com.alexIT.VioletsNeils.commands.Command;
 import com.alexIT.VioletsNeils.dto.TgUserDto;
@@ -6,7 +6,7 @@ import com.alexIT.VioletsNeils.enums.RoleUser;
 import com.alexIT.VioletsNeils.enums.UserState;
 import com.alexIT.VioletsNeils.keyboards.KeyboardBuilder;
 import com.alexIT.VioletsNeils.keyboards.impl.adminKeyboards.factory.TransferMonthKeyboardFactory;
-import com.alexIT.VioletsNeils.keyboards.impl.userKeyboards.factory.DaysKeyboardFactory;
+import com.alexIT.VioletsNeils.keyboards.impl.adminKeyboards.factory.TransferRecordDateSelectionKeyboardFactory;
 import com.alexIT.VioletsNeils.service.impl.DailyRecordServiceImpl;
 import com.alexIT.VioletsNeils.session.UserSession;
 import com.alexIT.VioletsNeils.session.UserSessionManager;
@@ -20,54 +20,52 @@ import java.time.LocalDate;
 
 @Component
 @RequiredArgsConstructor
-public class SelectedMonthTransferCommand implements Command {
+public class CanselMonthCommand implements Command {
 
-    private final DaysKeyboardFactory daysKeyboardFactory;
-    private final DailyRecordServiceImpl dailyRecordService;
+    private final TransferRecordDateSelectionKeyboardFactory transferRecordDateSelectionKeyboardFactory;
     private final TransferMonthKeyboardFactory transferMonthKeyboardFactory;
+    private final DailyRecordServiceImpl dailyRecordService;
     private final UserSessionManager sessionManager;
 
     @Override
     public boolean supports(String text, UserState state, RoleUser roleUser) {
-        return text != null && (text.equals("/selectedTransferNextMonthAdmin") || text.equals("/selectedTransferCurrentMonthAdmin") || text.equals("/chooseTransferMonth"))
-                && state.equals(UserState.PREPARED)
-                && roleUser.equals(RoleUser.ADMIN);
+        return text != null && (text.equals("/canselCurrentMonthAdmin") || text.equals("/canselNextMonthAdmin") || text.equals("/chooseCanselMonth"))
+        && state.equals(UserState.PREPARED)
+        && roleUser.equals(RoleUser.ADMIN);
     }
 
     @Override
     public BotApiMethod<?> handler(TgUserDto userDto) {
-        UserSession userSession = sessionManager.getOrCreateSession(userDto.getUserId());
-        LocalDate selectedMonth;
-        if (userDto.getText().equals("/selectedTransferCurrentMonthAdmin")) {
-            selectedMonth = LocalDate.now();
-            userSession.setSelectedMonth(selectedMonth);
-        } else {
-            selectedMonth = LocalDate.now().plusMonths(1);
-            userSession.setSelectedMonth(selectedMonth);
-        }
-
-        if (userDto.getText().equals("/chooseTransferMonth")) {
+        if (userDto.getText().equals("/chooseCanselMonth")) {
             return chooseMonth(userDto);
         }
-        KeyboardBuilder keyboardBuilder = daysKeyboardFactory.create(dailyRecordService, selectedMonth.getYear(), selectedMonth.getMonth(),
-                "/transferDate_%d-%d-%d",
-                "/chooseTransferMonth");
+        UserSession userSession = sessionManager.getOrCreateSession(userDto.getUserId());
+        LocalDate month;
+        if (userDto.getText().equals("/canselCurrentMonthAdmin")) {
+            month = LocalDate.now();
+            userSession.setSelectedMonth(month);
+        } else {
+            month = LocalDate.now().plusMonths(1);
+            userSession.setSelectedMonth(month);
+        }
+        KeyboardBuilder keyboardBuilder = transferRecordDateSelectionKeyboardFactory.create(dailyRecordService, month,
+                "/canselDayCommand_%s", "/chooseCanselMonth");
         InlineKeyboardMarkup keyboard = keyboardBuilder.build();
         return EditMessageText.builder()
                 .chatId(userDto.getChatId())
                 .messageId(userDto.getMessageId())
-                .text("Выберите день для переноса.")
+                .text("Выберите день для удаления записи.")
                 .replyMarkup(keyboard)
                 .build();
     }
 
     private EditMessageText chooseMonth(TgUserDto dto) {
-        KeyboardBuilder keyboardBuilder = transferMonthKeyboardFactory.create("selectedTransfer", "/transferRecord_admin");
+        KeyboardBuilder keyboardBuilder = transferMonthKeyboardFactory.create("cansel","/canselOrTransferRecord");
         InlineKeyboardMarkup keyboard = keyboardBuilder.build();
         return EditMessageText.builder()
                 .chatId(dto.getChatId())
                 .messageId(dto.getMessageId())
-                .text("Выберите месяц куда перенести запись.")
+                .text("Выберите месяц для удаления записи.")
                 .replyMarkup(keyboard)
                 .build();
     }

@@ -1,4 +1,4 @@
-package com.alexIT.VioletsNeils.commands.adminCommands.CanselOrTransferRecordCommands;
+package com.alexIT.VioletsNeils.commands.adminCommands.CanselOrTransferRecordCommands.transferCommands;
 
 import com.alexIT.VioletsNeils.commands.Command;
 import com.alexIT.VioletsNeils.dto.TgUserDto;

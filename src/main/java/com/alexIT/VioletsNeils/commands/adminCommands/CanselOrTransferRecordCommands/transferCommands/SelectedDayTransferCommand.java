@@ -1,4 +1,4 @@
-package com.alexIT.VioletsNeils.commands.adminCommands.CanselOrTransferRecordCommands;
+package com.alexIT.VioletsNeils.commands.adminCommands.CanselOrTransferRecordCommands.transferCommands;
 
 import com.alexIT.VioletsNeils.commands.Command;
 import com.alexIT.VioletsNeils.dto.TgUserDto;
@@ -31,13 +31,13 @@ public class SelectedDayTransferCommand implements Command {
 
     @Override
     public boolean supports(String text, UserState state, RoleUser roleUser) {
-        return text != null && (text.startsWith("/transferDate_") || text.equals("/chooseDay")) && state.equals(UserState.PREPARED) && roleUser.equals(RoleUser.ADMIN);
+        return text != null && (text.startsWith("/transferDate_") || text.equals("/chooseTransferDay")) && state.equals(UserState.PREPARED) && roleUser.equals(RoleUser.ADMIN);
     }
 
     @Override
     public BotApiMethod<?> handler(TgUserDto userDto) {
         UserSession userSession = sessionManager.getOrCreateSession(userDto.getUserId());
-        if (userDto.getText().equals("/chooseDay")) {
+        if (userDto.getText().equals("/chooseTransferDay")) {
             return chooseDay(userDto, userSession.getSelectedMonth());
         }
         String[] textArr = userDto.getText().split("_");
@@ -50,7 +50,7 @@ public class SelectedDayTransferCommand implements Command {
         userSession.setSelectedDate(selectedDate);
         KeyboardBuilder keyboardBuilder = timeKeyboardBuilderFactory.create(dailyRecordService, timeSlotService, selectedDate,
                 "/transferTime_%s",
-                "/chooseDay");
+                "/chooseTransferDay");
         InlineKeyboardMarkup keyboard = keyboardBuilder.build();
         return EditMessageText.builder()
                 .chatId(userDto.getChatId())

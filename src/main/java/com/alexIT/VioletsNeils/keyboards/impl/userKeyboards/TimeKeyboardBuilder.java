@@ -56,7 +56,7 @@ public class TimeKeyboardBuilder implements KeyboardBuilder {
             if (!occupiedTimes.contains(entry.getKey())) {
                 String[] timeValue = entry.getValue().split(":");
                 rows.add(addButton(
-                        String.format("на %s", entry.getValue()),
+                        String.format("%s", entry.getValue()),
                         String.format(callbackPrefix, timeValue[0])
                 ));
             }
