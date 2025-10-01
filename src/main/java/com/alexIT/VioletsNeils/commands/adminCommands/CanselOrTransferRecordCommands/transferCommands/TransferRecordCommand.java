@@ -10,6 +10,8 @@ import com.alexIT.VioletsNeils.keyboards.KeyboardBuilder;
 import com.alexIT.VioletsNeils.keyboards.impl.adminKeyboards.factory.TransferMonthKeyboardFactory;
 import com.alexIT.VioletsNeils.keyboards.impl.adminKeyboards.factory.TransferRecordSelectionKeyboardFactory;
 import com.alexIT.VioletsNeils.service.impl.DailyRecordServiceImpl;
+import com.alexIT.VioletsNeils.session.UserSession;
+import com.alexIT.VioletsNeils.session.UserSessionManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
@@ -27,8 +29,7 @@ public class TransferRecordCommand implements Command {
     private final TransferMonthKeyboardFactory factory;
     private final TransferRecordSelectionKeyboardFactory transferRecordSelectionKeyboardFactory;
     private final DailyRecordServiceImpl dailyRecordService;
-    private boolean isTransferRecord;
-    private LocalDate selectedDate;
+    private final UserSessionManager sessionManager;
     private static final String INFO_ABOUT_RECORD = """
             Имя: %s
             Номер телефона: %s
@@ -39,27 +40,24 @@ public class TransferRecordCommand implements Command {
 
     @Override
     public boolean supports(String text, UserState state, RoleUser roleUser) {
-        if (text != null && text.equals("/transferRecord_admin") && state.equals(UserState.PREPARED) && roleUser.equals(RoleUser.ADMIN)) {
-            return true;
-        }
-        if (text != null && text.startsWith("/transferRecord_") && state.equals(UserState.PREPARED) && roleUser.equals(RoleUser.ADMIN)) {
-            String[] textArr = text.split("_");
-            String[] dateArr = textArr[1].split("-");
-            selectedDate = LocalDate.of(
-                    Integer.parseInt(dateArr[0]),
-                    Integer.parseInt(dateArr[1]),
-                    Integer.parseInt(dateArr[2])
-            );
-            isTransferRecord = true;
-            return true;
-        }
-        return false;
+        return text != null && (text.equals("/transferRecord_admin") || text.startsWith("/transferRecordDate_"))
+                && state.equals(UserState.PREPARED)
+                && roleUser.equals(RoleUser.ADMIN);
     }
 
     @Override
     public BotApiMethod<?> handler(TgUserDto userDto) {
-        if (isTransferRecord) {
-            return selectRecord(userDto);
+        UserSession userSession = sessionManager.getOrCreateSession(userDto.getUserId());
+        if (userDto.getText().startsWith("/transferRecordDate_")) {
+            String[] textArr = userDto.getText().split("_");
+            String[] dateArr = textArr[1].split("-");
+            LocalDate selectedDate = LocalDate.of(
+                    Integer.parseInt(dateArr[0]),
+                    Integer.parseInt(dateArr[1]),
+                    Integer.parseInt(dateArr[2])
+            );
+            userSession.setSelectedDate(selectedDate);
+            return selectRecord(userDto, selectedDate);
         }
         KeyboardBuilder keyboardBuilder = factory.create("transferRecord", "/canselOrTransferRecord");
         InlineKeyboardMarkup keyboard = keyboardBuilder.build();
@@ -71,7 +69,7 @@ public class TransferRecordCommand implements Command {
                 .build();
     }
 
-    private EditMessageText selectRecord(TgUserDto dto) {
+    private EditMessageText selectRecord(TgUserDto dto, LocalDate selectedDate) {
         Optional<DailyRecord> optionalDailyRecord = dailyRecordService.findByDate(selectedDate);
         List<TimeSlot> timeSlotList = optionalDailyRecord.get().getTimeSlotList()
                 .stream()
@@ -81,16 +79,15 @@ public class TransferRecordCommand implements Command {
         KeyboardBuilder keyboardBuilder = transferRecordSelectionKeyboardFactory.create(timeSlotList,
                 "/selectedTransferRecord_%s", backCallBack);
         InlineKeyboardMarkup keyboard = keyboardBuilder.build();
-        isTransferRecord = false;
         return EditMessageText.builder()
                 .chatId(dto.getChatId())
                 .messageId(dto.getMessageId())
-                .text(createMessage(timeSlotList))
+                .text(createMessage(timeSlotList, selectedDate))
                 .replyMarkup(keyboard)
                 .build();
     }
 
-    private String createMessage(List<TimeSlot> timeSlotList) {
+    private String createMessage(List<TimeSlot> timeSlotList, LocalDate selectedDate) {
         StringBuilder builder = new StringBuilder();
         builder.append("Вы выбрали день: ").append(selectedDate.toString()).append("\n");
         builder.append("Выберите время для переноса.").append("\n\n");

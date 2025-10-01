@@ -16,13 +16,14 @@ public class UserSession {
     private UserState state;
     private final Long userId;
     private Service selectedService;
+    private String phoneNumber;
+    private String fullName;
+    private RoleUser roleUser;
+
     private Long selectedRecordId;
     private LocalDate selectedDate;
     private LocalTime selectedTime;
     private LocalDate selectedMonth;
-    private String phoneNumber;
-    private String fullName;
-    private RoleUser roleUser;
 
     public UserSession(Long userId) {
         state = UserState.NEW_USER;

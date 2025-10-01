@@ -35,7 +35,7 @@ public class SelectMonthlyTransferCommand implements Command {
         } else {
             selectedMonth = LocalDate.now().plusMonths(1);
         }
-        KeyboardBuilder keyboardBuilder = keyboardFactory.create(dailyRecordService, selectedMonth, "/transferRecord_%s", "/transferRecord_admin");
+        KeyboardBuilder keyboardBuilder = keyboardFactory.create(dailyRecordService, selectedMonth, "/transferRecordDate_%s", "/transferRecord_admin");
         InlineKeyboardMarkup keyboard = keyboardBuilder.build();
         return EditMessageText.builder()
                 .chatId(userDto.getChatId())
