@@ -36,7 +36,7 @@ public class StartCommand implements Command {
 
     @Override
     public boolean supports(String text, UserState state, RoleUser roleUser) {
-        return text != null && text.equals("/start") && (state.equals(UserState.NEW_USER) || state.equals(UserState.PREPARED) && roleUser.equals(RoleUser.USER));
+        return text != null && text.equals("/start") && (state.equals(UserState.NEW_USER) || state.equals(UserState.PREPARED)) && (roleUser.equals(RoleUser.USER) || roleUser.equals(RoleUser.ADMIN));
     }
 
     @Override
