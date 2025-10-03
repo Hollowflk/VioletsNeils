@@ -9,6 +9,7 @@ import com.alexIT.VioletsNeils.session.UserSession;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -20,6 +21,10 @@ public class UserServiceImpl implements UserService {
 
     public UserServiceImpl(TgUserRepository repository) {
         this.repository = repository;
+    }
+
+    public List<TgUser> findAll() {
+        return repository.findAll();
     }
 
     public TgUserDto createUserDto(Update update) {

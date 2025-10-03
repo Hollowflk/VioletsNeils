@@ -15,6 +15,7 @@ public class AdminKeyboardBuilder implements KeyboardBuilder {
         List<InlineKeyboardRow> rows = new ArrayList<>();
         rows.add(addButton("Показать записи", "/showRecordsForAdmin"));
         rows.add(addButton("Отправить напоминание", "/getDateForNotifications"));
+        rows.add(addButton("Записать клиента", "/signupUserFromAdmin"));
         rows.add(addButton("Отмена/Перенос записи", "/canselOrTransferRecord"));
         return new InlineKeyboardMarkup(rows);
     }
