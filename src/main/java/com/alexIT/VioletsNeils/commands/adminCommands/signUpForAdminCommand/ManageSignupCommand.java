@@ -31,7 +31,7 @@ public class ManageSignupCommand implements Command {
             Имя пользователя: %s
             Номер телефона: %s
             Услуга: %s
-            Цена услуги: %s
+            Цена услуги: %s р
             Время записи: %s
             Продолжительность услуги: %s
             
@@ -57,7 +57,7 @@ public class ManageSignupCommand implements Command {
                 0
         );
         userSession.setSelectedTime(selectedTime);
-        KeyboardBuilder keyboardBuilder = confirmKeyboardFactory.create("/confirmSignUp",
+        KeyboardBuilder keyboardBuilder = confirmKeyboardFactory.create("/confirmSignUpAdmin",
                 "/chooseSignupTime");
         return EditMessageText.builder()
                 .chatId(userDto.getChatId())

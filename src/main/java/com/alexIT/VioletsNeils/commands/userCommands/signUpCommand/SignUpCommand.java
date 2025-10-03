@@ -4,8 +4,12 @@ import com.alexIT.VioletsNeils.commands.Command;
 import com.alexIT.VioletsNeils.dto.TgUserDto;
 import com.alexIT.VioletsNeils.enums.RoleUser;
 import com.alexIT.VioletsNeils.enums.UserState;
-import com.alexIT.VioletsNeils.keyboards.impl.userKeyboards.ServiceCategoryKeyboardBuilder;
+import com.alexIT.VioletsNeils.keyboards.KeyboardBuilder;
+import com.alexIT.VioletsNeils.keyboards.impl.userKeyboards.ServiceCategoryKeyboard;
+import com.alexIT.VioletsNeils.keyboards.impl.userKeyboards.factory.ServiceCategoryKeyboardFactory;
+import com.alexIT.VioletsNeils.service.ServiceCategoryService;
 import com.alexIT.VioletsNeils.session.UserSessionManager;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
@@ -14,16 +18,12 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class SignUpCommand implements Command {
 
-
-    private final ServiceCategoryKeyboardBuilder serviceCategoryKeyboardBuilder;
+    private final ServiceCategoryKeyboardFactory serviceCategoryKeyboardFactory;
+    private final ServiceCategoryService serviceCategoryService;
     private final UserSessionManager sessionManager;
-
-    public SignUpCommand(ServiceCategoryKeyboardBuilder serviceCategoryKeyboardBuilder, UserSessionManager sessionManager) {
-        this.serviceCategoryKeyboardBuilder = serviceCategoryKeyboardBuilder;
-        this.sessionManager = sessionManager;
-    }
 
     @Override
     public boolean supports(String text, UserState state, RoleUser roleUser) {
@@ -33,7 +33,8 @@ public class SignUpCommand implements Command {
     @Override
     public BotApiMethod<?> handler(TgUserDto userDto) {
         sessionManager.getOrCreateSession(userDto.getUserId());
-        InlineKeyboardMarkup keyboard = serviceCategoryKeyboardBuilder.build();
+        KeyboardBuilder keyboardBuilder = serviceCategoryKeyboardFactory.create(serviceCategoryService, "/service_category_%d", "/menu");
+        InlineKeyboardMarkup keyboard = keyboardBuilder.build();
         return EditMessageText.builder()
                 .chatId(userDto.getChatId())
                 .messageId(userDto.getMessageId())

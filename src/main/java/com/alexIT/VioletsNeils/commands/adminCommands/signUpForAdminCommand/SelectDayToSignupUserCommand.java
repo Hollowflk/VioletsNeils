@@ -35,10 +35,10 @@ public class SelectDayToSignupUserCommand implements Command {
 
     @Override
     public BotApiMethod<?> handler(TgUserDto userDto) {
-        if (userDto.getText().equals("/chooseSignupMonth")) {
-            return chooseSignupMonth(userDto);
-        }
         UserSession userSession = sessionManager.getOrCreateSession(userDto.getUserId());
+        if (userDto.getText().equals("/chooseSignupMonth")) {
+            return chooseSignupMonth(userDto, userSession.getSelectedService().getCategory().getId());
+        }
         LocalDate month;
         if (userDto.getText().equals("/signUpCurrentMonthAdmin")) {
             month = LocalDate.now();
@@ -57,8 +57,9 @@ public class SelectDayToSignupUserCommand implements Command {
                 .build();
     }
 
-    private EditMessageText chooseSignupMonth(TgUserDto userDto) {
-        KeyboardBuilder keyboardBuilder = monthKeyboardFactory.create("signUp", "/signupUserFromAdmin");
+    private EditMessageText chooseSignupMonth(TgUserDto userDto, Long categoryId) {
+        KeyboardBuilder keyboardBuilder = monthKeyboardFactory.create("signUp",
+                String.format("/signupCategory_%s", categoryId));
         return EditMessageText.builder()
                 .chatId(userDto.getChatId())
                 .messageId(userDto.getMessageId())

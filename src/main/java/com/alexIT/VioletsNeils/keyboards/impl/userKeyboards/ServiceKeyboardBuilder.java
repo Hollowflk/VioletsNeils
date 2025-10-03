@@ -14,10 +14,14 @@ public class ServiceKeyboardBuilder implements KeyboardBuilder {
 
     private final int serviceCategoryId;
     private final ServiceService serviceService;
+    private final String callbackPrefix;
+    private final String backCallbackPrefix;
 
-    public ServiceKeyboardBuilder(int serviceCategoryId, ServiceService serviceService) {
+    public ServiceKeyboardBuilder(int serviceCategoryId, ServiceService serviceService, String callbackPrefix, String backCallbackPrefix) {
         this.serviceCategoryId = serviceCategoryId;
         this.serviceService = serviceService;
+        this.callbackPrefix = callbackPrefix;
+        this.backCallbackPrefix = backCallbackPrefix;
     }
 
     @Override
@@ -25,11 +29,11 @@ public class ServiceKeyboardBuilder implements KeyboardBuilder {
         List<InlineKeyboardRow> rows = new ArrayList<>();
         List<Service> serviceList = serviceService.findAllByCategoryId(serviceCategoryId);
         for (Service service : serviceList) {
-            rows.add(addButton(service.getName(), String.format("/service_id%d", service.getId())));
+            rows.add(addButton(service.getName(), String.format(callbackPrefix, service.getId())));
         }
         InlineKeyboardButton back = InlineKeyboardButton.builder()
                 .text("Назад")
-                .callbackData("/signUp")
+                .callbackData(backCallbackPrefix)
                 .build();
         rows.add(new InlineKeyboardRow(back));
         return new InlineKeyboardMarkup(rows);

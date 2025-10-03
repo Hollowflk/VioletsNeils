@@ -3,8 +3,6 @@ package com.alexIT.VioletsNeils.keyboards.impl.userKeyboards;
 import com.alexIT.VioletsNeils.entity.ServiceCategory;
 import com.alexIT.VioletsNeils.keyboards.KeyboardBuilder;
 import com.alexIT.VioletsNeils.service.ServiceCategoryService;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
@@ -12,14 +10,16 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import java.util.ArrayList;
 import java.util.List;
 
-@Slf4j
-@Component
-public class ServiceCategoryKeyboardBuilder implements KeyboardBuilder {
+public class ServiceCategoryKeyboard implements KeyboardBuilder {
 
     private final ServiceCategoryService serviceCategoryService;
+    private final String callbackPrefix;
+    private final String backCallbackPrefix;
 
-    public ServiceCategoryKeyboardBuilder(ServiceCategoryService serviceCategoryService) {
+    public ServiceCategoryKeyboard(ServiceCategoryService serviceCategoryService, String callbackPrefix, String backCallbackPrefix) {
         this.serviceCategoryService = serviceCategoryService;
+        this.callbackPrefix = callbackPrefix;
+        this.backCallbackPrefix = backCallbackPrefix;
     }
 
     @Override
@@ -27,11 +27,11 @@ public class ServiceCategoryKeyboardBuilder implements KeyboardBuilder {
         List<InlineKeyboardRow> rows = new ArrayList<>();
         List<ServiceCategory> serviceCategoryList = serviceCategoryService.findAll();
         for (ServiceCategory category : serviceCategoryList) {
-            rows.add(addButton(category.getName(), String.format("/service_category_%d", category.getId())));
+            rows.add(addButton(category.getName(), String.format(callbackPrefix, category.getId())));
         }
         InlineKeyboardButton back = InlineKeyboardButton.builder()
                 .text("Назад")
-                .callbackData("/menu")
+                .callbackData(backCallbackPrefix)
                 .build();
         rows.add(new InlineKeyboardRow(back));
         return new InlineKeyboardMarkup(rows);

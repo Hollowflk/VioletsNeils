@@ -7,6 +7,7 @@ import com.alexIT.VioletsNeils.enums.RoleUser;
 import com.alexIT.VioletsNeils.enums.UserState;
 import com.alexIT.VioletsNeils.keyboards.KeyboardBuilder;
 import com.alexIT.VioletsNeils.keyboards.impl.userKeyboards.ServiceKeyboardBuilder;
+import com.alexIT.VioletsNeils.keyboards.impl.userKeyboards.factory.ServiceKeyboardFactory;
 import com.alexIT.VioletsNeils.service.ServiceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -20,8 +21,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ServiceCategoryCommand implements Command {
 
-    private int serviceCategoryId;
     private final ServiceService serviceService;
+    private final ServiceKeyboardFactory serviceKeyboardFactory;
     private static final String SERVICES_INFO = """
             Наименование услуги:%n%s
             Цена услуги: %s руб.
@@ -30,34 +31,34 @@ public class ServiceCategoryCommand implements Command {
 
     @Override
     public boolean supports(String text, UserState state, RoleUser roleUser) {
-        if (text != null && text.startsWith("/service_category_") && state.equals(UserState.PREPARED) && roleUser.equals(RoleUser.USER)) {
-            serviceCategoryId = Integer.parseInt(text.substring(18));
-            return true;
-        }
-        return false;
+        return text != null && text.startsWith("/service_category_")
+                && state.equals(UserState.PREPARED)
+                && roleUser.equals(RoleUser.USER);
     }
 
     @Override
     public BotApiMethod<?> handler(TgUserDto userDto) {
-        KeyboardBuilder keyboardBuilder = new ServiceKeyboardBuilder(serviceCategoryId, serviceService);
+        int serviceCategoryId = Integer.parseInt(userDto.getText().split("_")[2]);
+        KeyboardBuilder keyboardBuilder = serviceKeyboardFactory.create(serviceCategoryId, serviceService,
+                "/service_id%d", "/signUp");
         InlineKeyboardMarkup keyboard = keyboardBuilder.build();
         return EditMessageText.builder()
                 .chatId(userDto.getChatId())
                 .messageId(userDto.getMessageId())
-                .text(createListInformationAboutServices())
+                .text(createListInformationAboutServices(serviceCategoryId))
                 .replyMarkup(keyboard)
                 .build();
     }
 
-    private String createListInformationAboutServices() {
+    private String createListInformationAboutServices(int serviceCategoryId) {
         StringBuilder builder = new StringBuilder();
         List<Service> serviceList = serviceService.findAllByCategoryId(serviceCategoryId);
         builder.append("Список услуг.").append("\n");
         for (Service service : serviceList) {
             builder.append(String.format(SERVICES_INFO,
-                    service.getName(),
-                    service.getPrice(),
-                    service.getDuration()))
+                            service.getName(),
+                            service.getPrice(),
+                            service.getDuration()))
                     .append("\n");
         }
         builder.append("Выберите услугу.");
