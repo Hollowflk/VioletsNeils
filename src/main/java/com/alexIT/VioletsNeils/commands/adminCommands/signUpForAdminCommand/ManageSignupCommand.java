@@ -11,6 +11,7 @@ import com.alexIT.VioletsNeils.service.TimeSlotService;
 import com.alexIT.VioletsNeils.service.impl.DailyRecordServiceImpl;
 import com.alexIT.VioletsNeils.session.UserSession;
 import com.alexIT.VioletsNeils.session.UserSessionManager;
+import com.alexIT.VioletsNeils.utils.MonthsAndDaysUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
@@ -28,11 +29,12 @@ public class ManageSignupCommand implements Command {
     private final DailyRecordServiceImpl dailyRecordService;
     private final TimeSlotService timeSlotService;
     private static final String INFO_ABOUT_RECORD = """
+            Запись на %s %s.
+            Время записи на %s ч.
             Имя пользователя: %s
             Номер телефона: %s
             Услуга: %s
             Цена услуги: %s р
-            Время записи: %s
             Продолжительность услуги: %s
             
             Подтвердить запись ?
@@ -68,13 +70,16 @@ public class ManageSignupCommand implements Command {
     }
 
     private String createMessage(UserSession userSession) {
+        String monthName = MonthsAndDaysUtils.getNameMonth(userSession.getSelectedDate().getMonth().getValue());
         return String.format(
                 INFO_ABOUT_RECORD,
+                userSession.getSelectedDate().getDayOfMonth(),
+                MonthsAndDaysUtils.monthGenitiveForms.get(monthName),
+                userSession.getSelectedTime(),
                 userSession.getFullName(),
                 userSession.getPhoneNumber(),
                 userSession.getSelectedService().getName(),
                 userSession.getSelectedService().getPrice(),
-                userSession.getSelectedTime(),
                 userSession.getSelectedService().getDuration()
         );
     }
