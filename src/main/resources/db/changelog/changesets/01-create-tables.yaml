@@ -1,0 +1,159 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1-create-tg-user
+      author: hollow
+      changes:
+        - createTable:
+            tableName: tg_user
+            columns:
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: full_name
+                  type: varchar(255)
+              - column:
+                  name: phone_number
+                  type: varchar(15)
+              - column:
+                  name: role
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 2-create-service-category
+      author: hollow
+      changes:
+        - createTable:
+            tableName: service_category
+            columns:
+              - column:
+                  name: id
+                  type: INTEGER
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+
+  - changeSet:
+      id: 3-create-service
+      author: hollow
+      changes:
+        - createTable:
+            tableName: service
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: price
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+              - column:
+                  name: duration
+                  type: INTERVAL
+                  constraints:
+                    nullable: false
+              - column:
+                  name: category_id
+                  type: INTEGER
+        - addForeignKeyConstraint:
+            baseTableName: service
+            baseColumnNames: category_id
+            referencedTableName: service_category
+            referencedColumnNames: id
+            constraintName: fk_service_category
+            onDelete: SET NULL
+
+  - changeSet:
+      id: 4-create-daily-record
+      author: hollow
+      changes:
+        - createTable:
+            tableName: daily_record
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: date
+                  type: DATE
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 5-create-time-slot
+      author: hollow
+      changes:
+        - createTable:
+            tableName: time_slot
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: time
+                  type: TIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: daily_id
+                  type: BIGINT
+              - column:
+                  name: service_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: BIGINT
+        - addForeignKeyConstraint:
+            baseTableName: time_slot
+            baseColumnNames: daily_id
+            referencedTableName: daily_record
+            referencedColumnNames: id
+            constraintName: fk_daily_record
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            baseTableName: time_slot
+            baseColumnNames: user_id
+            referencedTableName: tg_user
+            referencedColumnNames: user_id
+            constraintName: fk_user
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            baseTableName: time_slot
+            baseColumnNames: service_id
+            referencedTableName: service
+            referencedColumnNames: id
+            constraintName: fk_service
+            onDelete: RESTRICT

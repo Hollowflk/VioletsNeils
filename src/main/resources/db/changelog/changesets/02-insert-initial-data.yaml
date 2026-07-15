@@ -1,0 +1,73 @@
+databaseChangeLog:
+  - changeSet:
+      id: 6-insert-categories
+      author: hollow
+      changes:
+        - insert:
+            tableName: service_category
+            columns:
+              - column: { name: name, value: "Педикюр" }
+        - insert:
+            tableName: service_category
+            columns:
+              - column: { name: name, value: "Маникюр" }
+        - insert:
+            tableName: service_category
+            columns:
+              - column: { name: name, value: "Наращивание ногтей" }
+
+  - changeSet:
+      id: 7-insert-services
+      author: hollow
+      changes:
+        - insert:
+            tableName: service
+            columns:
+              - column: { name: name, value: "Гигиеническая обработка пальчиков ног без покрытия" }
+              - column: { name: price, value: 900 }
+              - column: { name: duration, value: "1 hour 15 minutes" }
+              - column: { name: category_id, value: 1 }
+        - insert:
+            tableName: service
+            columns:
+              - column: { name: name, value: "Гигиеническая обработка пальчиков ног с покрытием гель-лак" }
+              - column: { name: price, value: 1800 }
+              - column: { name: duration, value: "2 hours" }
+              - column: { name: category_id, value: 1 }
+        - insert:
+            tableName: service
+            columns:
+              - column: { name: name, value: "Гигиеническая обработка стоп и пальчиков без покрытия" }
+              - column: { name: price, value: 1800 }
+              - column: { name: duration, value: "1 hour 30 minutes" }
+              - column: { name: category_id, value: 1 }
+        - insert:
+            tableName: service
+            columns:
+              - column: { name: name, value: "Полная обработка стоп и пальчиков с покрытием гель-лак" }
+              - column: { name: price, value: 2000 }
+              - column: { name: duration, value: "2 hours" }
+              - column: { name: category_id, value: 1 }
+
+        - insert:
+            tableName: service
+            columns:
+              - column: { name: name, value: "Наращивание ногтей до 3, покрытие в один тон" }
+              - column: { name: price, value: 2000 }
+              - column: { name: duration, value: "2 hours 30 minutes" }
+              - column: { name: category_id, value: 2 }
+
+        - insert:
+            tableName: service
+            columns:
+              - column: { name: name, value: "Гигиенический маникюр без покрытия" }
+              - column: { name: price, value: 800 }
+              - column: { name: duration, value: "1 hour 15 minutes" }
+              - column: { name: category_id, value: 3 }
+        - insert:
+            tableName: service
+            columns:
+              - column: { name: name, value: "Маникюр с укреплением жестким гелем+покрытием гель-лак однотон" }
+              - column: { name: price, value: 1700 }
+              - column: { name: duration, value: "2 hours" }
+              - column: { name: category_id, value: 3 }
